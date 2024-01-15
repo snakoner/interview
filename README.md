@@ -12,7 +12,24 @@ Docs for interview preparing
 
 ------------
 
-To generate merged markdown file:
+To generate merged all markdown files:
 ```bash
-  python merge.py [directory]  
+  make
+```
+
+To generate merged linux-kernel files:
+```bash
+  make merge-linux-kernel
+```
+
+To generate merged linux-userspace files:
+
+```bash
+  make merge-linux-userspace
+```
+
+To generate merged cpp files:
+
+```bash
+  make merge-cpp
 ```
