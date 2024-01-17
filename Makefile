@@ -4,16 +4,16 @@ default : merge
 
 PY_SCRIPT=merge.py
 PATH_LINUX_KERNEL=./linux-kernel-docs/
-PATH_LINUX_USERSPACE=./linux-userspace-docs/
+PATH_GENERAL=./general/
 PATH_CPP=./cpp/
 	
 merge-linux-kernel:
 	python ${PY_SCRIPT} ${PATH_LINUX_KERNEL}
 
-merge-linux-userspace:
+merge-general:
 	python ${PY_SCRIPT} ${PATH_LINUX_USERSPACE}
 
 merge-cpp:
 	python ${PY_SCRIPT} ${PATH_CPP}
 
-merge: merge-linux-kernel merge-linux-userspace merge-cpp
+merge: merge-linux-kernel merge-general merge-cpp
