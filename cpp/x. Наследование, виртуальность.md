@@ -133,3 +133,47 @@ int main() {
     return 0;
 }
 ```
+
+## Проблема ромба
+Проблема ромба (Diamond problem)- классическая проблема в языках, которые поддерживают возможность множественного наследования. Эта проблема возникает когда классы B и C наследуют A, а класс D наследует B и C.
+
+![image](https://github.com/snakoner/interview/assets/26333766/61403ba6-a0d6-4e75-8207-0e7307abafa6)
+
+К примеру, классы A, B и C определяют метод `print_letter()`. Если `print_letter()` будет вызываться классом D, неясно какой метод должен быть вызван — метод класса A, B или C. Разные языки по-разному подходят к решению ромбовидной проблем. В C ++ решение проблемы оставлено на усмотрение программиста:
+- вызвать метод конкретного суперкласса;
+- обратиться к объекту подкласса как к объекту определенного суперкласса;
+- переопределить проблематичный метод в последнем дочернем классе (в коде — turn_on() в подклассе Laptop).
+```cpp
+
+class A {
+};
+
+class B : public A { 
+    public:
+        void turn_on() {
+            cout << "B is on." << endl;
+        }
+};
+
+class C : public A { 
+    public:
+        void turn_on() {
+            cout << "C is on." << endl;
+        }
+};
+
+class D : public B, public C {};
+
+int main() {
+    D d;
+
+    // 1. calling method of specific superclass
+    D.B::turn_on();
+    D.C::turn_on();
+
+    // 2. treating Laptop instance as Monitor instance via static cast
+    static_cast<B&>(d).turn_on();
+    return 0;
+}
+```
+
