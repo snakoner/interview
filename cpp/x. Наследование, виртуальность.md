@@ -126,4 +126,10 @@ class B {
 class C: public A, public B {};
 
 // непонятно, какой из методов turn_on вызывать 
+
+int main() {
+    Laptop Laptop_instance;
+    Laptop_instance.turn_on();     // will cause compile time error
+    return 0;
+}
 ```
