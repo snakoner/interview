@@ -23,29 +23,29 @@
 
 ```cpp
 
-class Device {
+class A {
     public:
-        Device() {}
-        ~Device() {}
+        A() {}
+        ~A() {}
 };
 
-class Computer: public Device {
+class B: public A {
     public:
-        Computer() {}
-        ~Computer() {}
+        B() {}
+        ~B() {}
 };
 
-class Laptop: public Computer {
+class C: public B {
     public:
-        Laptop() {}
-        ~Laptop() {}
+        C() {}
+        ~C() {}
 };
 
 int main() {
    Laptop lt;
 }
-// Device() -> Computer() -> Laptop()
-// ~Laptop() -> ~Computer() -> ~Device()
+// A() -> B() -> C()
+// ~C() -> ~B() -> ~A()
 ```
 
 ## Виртуальные деструкторы
