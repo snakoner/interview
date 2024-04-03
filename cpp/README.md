@@ -39,6 +39,34 @@ b = bb; // оператор присваивания
 > Если использовать `delete[]` после `new` или `delete` после `new[]`, то undefined behaviour.
 
 3. Отличие static_cast от dynamic_cast?
+static_cast можно использовать для приведенеия от Base к Derived, так и от Derived к Base\
+dynamic_cast можно использовать для приведенеия от Derived к Base, но использовать от Base к Derived можно только тогда, когда Base является полиморфным (имеет хотя бы одну виртуальную функцию)\
+
+```cpp
+class Base {
+public:
+    void hello() {
+        std::cout << "hello" << std::endl;
+    }
+};
+
+class Derived : public Base {
+    
+};
+
+int main() {
+    Derived d;
+    Base *b = static_cast<Base *>(&d);
+
+    static_cast<Derived *>(b);      // ok always
+    static_cast<Base *>(&d);        // ok always
+
+    dynamic_cast<Base *>(&d);       // ok always
+    dynamic_cast<Derived *>(b);     // ok only if Base is polymorphic
+
+    return 0;
+}
+```
 
 4. Шаблоны нужно объявлять в header файлах, так как иначе компилятор не сможет инстанцировать нужный тип.
 
