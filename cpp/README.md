@@ -39,6 +39,7 @@ b = bb; // оператор присваивания
 > Если использовать `delete[]` после `new` или `delete` после `new[]`, то undefined behaviour.
 
 3. Отличие static_cast от dynamic_cast?
+   
 static_cast можно использовать для приведенеия от Base к Derived, так и от Derived к Base\
 dynamic_cast можно использовать для приведенеия от Derived к Base, но использовать от Base к Derived можно только тогда, когда Base является полиморфным (имеет хотя бы одну виртуальную функцию)\
 
