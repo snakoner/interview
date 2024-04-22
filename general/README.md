@@ -66,5 +66,5 @@ recv()
 
 Вы используете эмулятор, когда вас больше всего волнует то, что делает система, и симулятор, когда вас интересует, как она это делает.
 
-![image]([https://github.com/snakoner/interview/assets/26333766/02dccadb-ddfc-48d8-bde9-40b10aefef89](https://www.freecodecamp.org/news/content/images/2022/10/3.png))
 
+![image](https://www.freecodecamp.org/news/content/images/2022/10/3.png)
