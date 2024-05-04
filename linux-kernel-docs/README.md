@@ -13,11 +13,23 @@ linux-kernel-docs
 > 7. Синхронизация данных ядра.md
 > 8. Таймеры.md
 > 9. Управление памятью.md
-
-
-## TODO
 > 11. Адресное пространство процесса.md
 
+
+## Booting SoC
+1. Reset
+2. Boot ROM - код в ROM, цель которого из другого источника (например с SD карты) получить другой загрузчик (uboot preloader)
+3. Uboot preloader (код умещается в 64 KB):
+- инициализация DDR + memtest
+- настройка частот
+- запись основного кода uboot в DDR
+- прыжок на основной uboot(bootloader).
+4. Uboot bootloader:
+- настройка периферии(SD/ETH/USB) для загрузки OS Kernel в DDR
+- загрузка ядра OS Kernel
+5. device tree
+6. Linux kernel
+7. rootfs
 
 ## Questions
 ### 1. Можно ли прерывать обработчик прерывания
