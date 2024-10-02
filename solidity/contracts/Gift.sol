@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.26;
 
@@ -50,10 +49,6 @@ contract Gift {
         units[addr] = Unit(_name, true, false, _birthday);
 
         counter += 1;
-    }
-
-    function perUnit() private view returns(uint256) {
-        return bank / counter;
     }
 
     function setBank(uint256 _bank) public onlyOwner {
