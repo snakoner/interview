@@ -1,12 +1,12 @@
-1. Чтобы контракт мог принимать деньги, нужно, чтобы в нем была объявлена функция receive (в теле можно ничего не указывать):
+1. Чтобы контракт мог принимать деньги, нужно, чтобы в нем была объявлена функция receive (название может быть другое, в теле можно ничего не указывать):
 
-```sol
+```solidity
     receive() external payable { }
 ```
 
 2. Отправить деньги из контракта на адрес можно так:
 
-```sol
+```solidity
 function withdraw() public {
   address payable recepient = payable(msg.sender);
   (bool success, ) = recepient.call{value: amount}("");
