@@ -1,1 +1,101 @@
+### assert, require, revert
 
+Эти три модификатора нужны для того, чтоб в случае если условие false, откатить транзакцию и вернуть день на адрес, который инициировал данную транзакцию
+
+Внутри require(contition, msg) - revert(msg). По сути одно и то же, но для revert нужен if.
+
+assert(contition) - более жесткая, использовать с осторожностью.
+
+```solidity
+contract Example {
+  address public owner;
+
+  constructor() {
+    owner = msg.sender;
+  }
+
+  function pay() external payable {}
+  
+  function withdraw(address payable _to) external {
+    require(msg.sender == owner, "only owner")
+    _to.transfer(address(this).balance);
+  }
+
+  function withdraw(address payable _to) external {
+    if (msg.sender != owner) {
+      revert("only owner");
+    }
+
+    _to.transfer(address(this).balance);
+  }
+}
+```
+
+#### Модификаторы
+
+Модификаторы могут пристыковываться к функции, внутри require или revert. Если модификатор возвращает ошибку, то функция не вызывается:
+
+```solidity
+contract Example {
+  address public owner;
+
+  constructor() {
+    owner = msg.sender;
+  }
+
+  function pay() external payable {}
+
+  modifier onlyOwner() {
+    require(msg.sender == ownder, "only owner");
+    _;  // обязательно означает, что надо выйти из модификатора и выполнить функцию
+  }
+
+  modifier onlyOwner(address _to) {
+    require(msg.sender == ownder, "only owner");
+    require(_to != address(0), "null address");
+    _;  // обязательно означает, что надо выйти из модификатора и выполнить функцию
+    require(cond, ""); // выполнится после функции
+  }
+
+
+  function withdraw(address payable _to) external onlyOwner {
+    _to.transfer(address(this).balance);
+  }
+}
+```
+
+#### События
+
+Сообщение внешнему миру о том, что что-то произошло. В специальный журнал рядом с блокчейном будет сохранено данное событие.
+
+1. События дешевые
+2. Можно использовать фронтенд и слушать события.
+3. Изнутри контракта читать нельзя
+
+
+```solidity
+contract Example {
+  address public owner;
+
+  constructor() {
+    owner = msg.sender;
+  }
+
+  event Paid(address _from, uint _amount, uint _ts);
+
+  function pay() external payable {
+    Paid(msg.sender, msg.value, block.timestamp);
+  }
+
+  modifier onlyOwner() {
+    require(msg.sender == ownder, "only owner");
+    _;  // обязательно означает, что надо выйти из модификатора и выполнить функцию
+  }
+
+  function withdraw(address payable _to) external onlyOwner {
+    _to.transfer(address(this).balance);
+
+    emit Paid(_to)
+  }
+}
+```
