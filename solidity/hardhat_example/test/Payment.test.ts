@@ -54,4 +54,27 @@ describe("Payments contract", function() {
         expect(paym.amount).to.be.eq(sum);
         expect(paym.from).to.be.eq(user2.address);
     });
+
+    it("should be right payment value for user and contract balance ok", async function() {
+        const {user2, payments} = await loadFixture(deploy);
+        const weiNumbers: number[] = [100, 200, 300];
+        let weiSum: number = 0;
+
+
+        for (const value of weiNumbers) {
+            weiSum += value;
+        }
+
+        for (const value of weiNumbers) {
+            await payments.connect(user2).pay("tx", {value: value});
+        }
+
+        const balance = await payments.balanceOf(user2.address);
+
+        expect(balance).to.be.equal(weiSum);
+
+        const contractBalance = await ethers.provider.getBalance(payments.target);
+
+        expect(balance).to.be.equal(weiSum);
+    });
 })
