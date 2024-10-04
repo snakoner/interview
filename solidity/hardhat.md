@@ -11,6 +11,12 @@ npm install --save-dev hardhat
 npx hardhat
 ```
 
+Компиляция всех контрактов:
 ```
 npx hardhat compile
+```
+
+Очистка старых скомпилированных версий:
+```
+npx hardhat clean
 ```
