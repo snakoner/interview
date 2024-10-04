@@ -7,8 +7,8 @@ npm init --yes
 npm install --save-dev hardhat
 ```
 
-```
-npx hardhat init  // выбрать ts
+```shell
+npx hardhat init  # выбрать ts
 ```
 
 Компиляция всех контрактов:
