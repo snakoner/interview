@@ -20,3 +20,8 @@ npx hardhat compile
 ```
 npx hardhat clean
 ```
+
+Тестирование:
+```
+npx hardhat test
+```
