@@ -8,7 +8,7 @@ npm install --save-dev hardhat
 ```
 
 ```
-npx hardhat
+npx hardhat init
 ```
 
 Компиляция всех контрактов:
