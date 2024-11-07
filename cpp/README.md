@@ -141,3 +141,28 @@ rgb.value = 0x112233; // пишем в область на стеке это з�
 printf("r = %x g = %x b = %x\n", rgb.r, rgb.g, rgb.b); // 0x11 0x22 0x33
 
 ```
+
+9. Copy-elission vs tmp objects:
+Рассмотрим код:
+```cpp
+class A {
+private: 
+    int x;
+public:
+    A(int x) : x(x) {
+        std::cout << "int" << std::endl;
+    }
+    A(const A &a) {
+        std::cout << "const &" << std::endl;
+    }
+    A(A&& a) {
+        std::cout << "&&" << std::endl;
+    }
+};
+
+int main() {
+    A a(A(1));   // "int"
+}
+```
+
+Здесь сработает copy-elission, конструктор перемещения не будет вызван.
