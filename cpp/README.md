@@ -145,23 +145,27 @@ printf("r = %x g = %x b = %x\n", rgb.r, rgb.g, rgb.b); // 0x11 0x22 0x33
 9. Copy-elission vs tmp objects:
 Рассмотрим код:
 ```cpp
+#include <iostream>
+
 class A {
-private: 
-    int x;
 public:
     A(int x) : x(x) {
-        std::cout << "int" << std::endl;
-    }
-    A(const A &a) {
-        std::cout << "const &" << std::endl;
+        std::cout << "A(int)" << std::endl;
+    } 
+    A(const A& a) {
+        std::cout << "A(A&)" << std::endl;
+        x = a.x;
     }
     A(A&& a) {
-        std::cout << "&&" << std::endl;
+        std::cout << "A(A&&)" << std::endl;
+        x = a.x;
     }
+private:
+    int x;
 };
 
 int main() {
-    A a(A(1));   // "int"
+    A a = A(A(1));   // pritns "A(int)"
 }
 ```
 
