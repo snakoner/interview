@@ -6,7 +6,7 @@ PRC_URL="https://eth-sepolia.g.alchemy.com/v2/UtjFRzFoEQd533NSskUCCCKEpW7z93t2"
 ```
 
 2. В файле hardhat.config.ts добавить конфиг:
-```bash
+```ts
 # hardhat.config.ts
 # ...
 require('dotenv').config()
@@ -34,7 +34,7 @@ module.exports = {
 ```
 
 3. В файле ./ignition/modules/Lock.ts:
-```bash
+```ts
 # ./ignition/modules/Lock.ts
 
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
