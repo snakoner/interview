@@ -1,3 +1,13 @@
+#### Как изменить время блокчейна
+
+```ts
+		await ethers.provider.send("evm_increaseTime", [3600])
+		await ethers.provider.send("evm_mine") // this one will have 02:00 PM as its timestamp
+
+```
+
+
+
 ####  Чтобы контракт мог принимать деньги, нужно, чтобы в нем была объявлена функция receive (название может быть другое, в теле можно ничего не указывать):
 
 ```solidity
