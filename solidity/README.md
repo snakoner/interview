@@ -1,9 +1,8 @@
 #### Как изменить время блокчейна
 
 ```ts
-		await ethers.provider.send("evm_increaseTime", [3600])
-		await ethers.provider.send("evm_mine") // this one will have 02:00 PM as its timestamp
-
+await ethers.provider.send("evm_increaseTime", [3600])
+await ethers.provider.send("evm_mine") // this one will have 02:00 PM as its timestamp
 ```
 
 
