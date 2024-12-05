@@ -1,3 +1,30 @@
+### tx.origin, msg.sender
+
+tx.origin - тот, кто первый инициировал транзакцую, во всей цепочке вызовов неизменен.
+msg.sender - тот, кто инициировал текущую транзакцию.
+
+```sol
+// 0xAAA
+contract A {
+  function fun() {
+    // tx.origin = 0xABC
+    // msg.sender = 0xBBB
+  }
+}
+
+// 0xBBB
+contract B {
+  A a;
+
+  function callA() external {
+    a.fun(); 
+  }
+}
+
+// account 0xABC calls B.callA()
+```
+
+
 ### Как изменить время блокчейна
 
 ```ts
