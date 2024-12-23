@@ -82,3 +82,61 @@ contract Test {
 > Нет, можно модифицировать в bytes -> bytes.length
 
 ### Hard
+1. Как работать со структурой, которая содержит mapping?
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Test {
+    struct Person {
+        string name;
+        mapping (address => uint) payments;
+    }
+
+    Person[] persons;
+
+    function addPerson(string memory _name) external {
+        Person storage newPerson = persons.push();
+        newPerson.name = _name;
+        newPerson.payments[address(this)] = 10;
+    }    
+}
+```
+2. Как создать массив в memory?
+> uint[] memory array = new uint[](size);
+3. Как создать mapping в memory?
+> Никак
+4. Может ли mapping быть аргументом или выходным значением?
+> Нет
+5. Что будет, если запросить несуществующий индекс в массиве? А в mapping?
+> В массиве: revert. В mapping - вернет дефолтное значение
+6. Механизмы повторного использования кода
+> функции, наследование, абстрактные контракты, библиотеки
+7. Как выполняется перегрузка функций?
+> virtual
+8. Как вызвать функцию родителя?
+> Parent.doWork(), super.doWork()
+9. Как создать новый контракт в контракте и получить его адрес?
+```solidity
+// Здесь Child - другой контракт, функция объявлена в Parent
+function createContract() external {
+  address newContract = address(new Child());
+}
+```
+10. Как формируется адрес контракта
+> Зависит от msg.sender, nonce - сколько транзакций было отправлено в msg.sender
+> Есть механизм create2: address newContract = address(new Child{salt: _salt}());, где _salt - bytes32. То есть теперь зависит от msg.sender, байткода Child, salt
+11. Как формируется адрес аккаунта?
+> 1. Генерация приватного ключа: 0x1c8e0aace34f5c0b92dbd5b1b2b2f2d2e3f4f5f6a7a8a9b0c0d0e0f1f2f3f4f5
+> 2. Получение публичного ключа (ECDSA): 0x04bfcab22c87b7d54c3d542deca60b02dc6c0d2bf65b5f6b01f4c72d7432234bf3ad0bfa4cc4e3e6374c49afbd3d47babc
+> 3. keccak256(public_key) и берем последние 20 байт
+12. Как сделать низкоуровневый вызов call:
+> (bool success, bytes memory response) = _to.call{value: 1 ether}(abi.encodeWithSignature("pay(uint256)", 42));
+> (bool success, bytes memory response) = _to.call{value: 1 ether}(abi.encodeWithSignature(Child.pay.selector, 42)); // если есть код
+13. Отличие tx.origin, msg.sender
+> tx.origin: кто изначально инициировал транзакцию
+> msg.sender: кто последний вызвал транзакцию - может быть контрактом.
+14. keccak256
+> Выход bytes32.
+15. Что такое indexed и как он связан с topics?
+> 
