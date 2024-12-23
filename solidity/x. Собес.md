@@ -139,4 +139,4 @@ function createContract() external {
 14. keccak256
 > Выход bytes32.
 15. Что такое indexed и как он связан с topics?
-> 
+> 29:37 | https://www.youtube.com/watch?v=NdNJiKBsjaw&t=1437s&ab_channel=IlyaKrukowski
