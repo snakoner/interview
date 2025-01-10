@@ -35,20 +35,38 @@ module.exports = {
 
 3. В файле ./ignition/modules/Lock.ts:
 ```ts
-# ./ignition/modules/Lock.ts
+# ./scripts/deploy.ts
+const { ethers, upgrades } = require("hardhat");
 
-import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+const contractParams = {
+    ownerFee: 2,
+    duration: 60 * 60 * 24,
+    ticketPrice: 100000000000000, // 10 ^ 15 wei = 0.0001 eth
+};
+  
+async function main() {
+    const lottery = await ethers.getContractFactory("DecentralizedLottery");
 
-const SimpleContractModule = buildModule("SimpleContractModule", (m) => {
-  const simpleContract = m.contract("SimpleContract", [], {});
+    console.log("Deploying contract...");
+    const proxy = await upgrades.deployProxy(lottery, [		
+        contractParams.ownerFee,
+        contractParams.duration,
+		contractParams.ticketPrice
+    ], {
+        initializer: "initialize",
+    });
 
-  return { simpleContract };
+    console.log("DecentralizedLottery:", await proxy.getAddress());
+}
+
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
 });
 
-export default SimpleContractModule;
 ```
 
 4. Деплой:
 ```bash
-npx hardhat ignition deploy ./ignition/modules/Lock.ts --network sepolia
+npx hardhat run ./scripts/deploy.ts --network sepolia
 ```
