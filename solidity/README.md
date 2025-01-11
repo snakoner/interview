@@ -1,3 +1,19 @@
+### Call if now signature:
+
+```solidity
+
+uint256 value = 12;
+// 1.
+bytes4 sign = bytes4(keccak256(("setValue(uint256)")));
+bytes memory data = abi.encodeWithSignature(sign, value);
+contract.call(data);
+
+// 2.
+contract.call(
+     abi.encodeWithSelector(Contract.setValue.selector, 12)
+);
+```
+
 ### Transparent, UUPS, Beacon Proxies
 #### Transparent Proxy
 1. **Механизм**: В Transparent Proxy обновления контролируются через прокси-контракт. Администратор прокси имеет права обновлять адрес реализации, и обычные пользователи не могут взаимодействовать с функциями обновления.
