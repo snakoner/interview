@@ -12,6 +12,12 @@ contract.call(data);
 contract.call(
      abi.encodeWithSelector(Contract.setValue.selector, 12)
 );
+
+// 3.
+contract.call(
+  abi.encodeWithSelector(bytes4(keccak256("setValue(uint256)")), 12)
+);
+
 ```
 
 ### Transparent, UUPS, Beacon Proxies
