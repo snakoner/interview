@@ -33,7 +33,7 @@ module.exports = {
 # ...
 ```
 
-3. В файле ./ignition/modules/Lock.ts:
+3. В файле ./scripts/deploy.ts:
 ```ts
 # ./scripts/deploy.ts
 const { ethers, upgrades } = require("hardhat");
@@ -66,7 +66,7 @@ main().catch((error) => {
 
 ```
 
-4. Деплой:
+4. Деплой(из корня проекта):
 ```bash
-npx hardhat run ./scripts/deploy.ts --network sepolia
+npx hardhat run ./scripts/deploy.ts --network <sepolia/mainnet>
 ```
