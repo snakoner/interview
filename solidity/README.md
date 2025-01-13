@@ -1,3 +1,6 @@
+### Сколько занимает bool?
+> 8 бит, как и uint8
+
 ### Call if know signature:
 
 ```solidity
