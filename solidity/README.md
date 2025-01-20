@@ -1,3 +1,14 @@
+### Где хранятся селекторы функций?
+В табличной структуре в контракте (диспатчер, в самом начале байткода):
+- Она представляет собой набор проверок if или jump инструкций, реализованных на уровне байткода EVM:
+```solidity
+switch selector
+case 0xa9059cbb { jump to transfer }     // address of function start
+case 0x70a08231 { jump to balanceOf }
+default { revert }
+```
+
+
 ### calldata vs memory
 #### Что такое calldata и memory
 > Calldata:
