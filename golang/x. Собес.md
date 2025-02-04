@@ -85,3 +85,51 @@
 10. Что такое unsafe.Pointer?
 
 	В Go unsafe.Pointer — это универсальный указатель, который позволяет обходить систему типов и манипулировать памятью напрямую. Он находится в пакете unsafe и используется в крайних случаях, когда нужна низкоуровневая работа с указателями.
+
+11. Что такое контекст в Go?
+
+В Go пакет context используется для управления **тайм-аутами(timeout, deadline)**, **отменой операций(gracefull shutdown)** и **передачи значений между функциями**. Это особенно полезно в конкурентных программах, работающих с goroutine.
+
+Виды:
+
+1. context.Background() - Базовый (нулевой) контекст, который используется как родительский для других контекстов
+2. context.TODO() - Используется, если непонятно, какой контекст использовать (например, при разработке или рефакторинге кода).
+3. context.WithCancel(parent) - Создаёт контекст с возможностью отмены
+
+	```go
+	ctx, cancel := context.WithCancel(context.Background())
+	
+	go func() {
+		time.Sleep(2 * time.Second)
+		cancel() // Отменяем контекст через 2 секунды
+	}()
+	
+	<-ctx.Done() // Блокируем выполнение, пока контекст не будет отменён
+	fmt.Println("Контекст отменён:", ctx.Err()) // context canceled
+	```
+4. context.WithTimeout(parent, duration) - Создаёт контекст, который автоматически отменяется через заданное время.
+	
+	```go
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel() // Всегда освобождаем ресурсы
+	
+	select {
+	case <-time.After(5 * time.Second):
+	    fmt.Println("Операция завершена")
+	case <-ctx.Done():
+	    fmt.Println("Тайм-аут:", ctx.Err()) // context deadline exceeded
+	}
+	```
+5. context.WithDeadline(parent, time) - Аналогично WithTimeout(), но указывает конкретный момент времени, когда контекст истечёт.
+6. context.WithValue(parent, key, value) - Позволяет передавать данные через контекст.
+	
+	```go
+	ctx := context.WithValue(context.Background(), "userID", 42)
+	
+	func process(ctx context.Context) {
+	    userID := ctx.Value("userID").(int)
+	    fmt.Println("User ID:", userID)
+	}
+	
+	process(ctx)
+	```
