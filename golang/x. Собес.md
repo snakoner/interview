@@ -71,3 +71,7 @@
 	a = append(a, 1)
 	println(a == nil, len(a), cap(a)) // false 1 1
  	```
+
+9. Что будет, если не проинициализировать map с помощью make?
+
+   panic
