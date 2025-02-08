@@ -145,3 +145,13 @@
 	fmt.Printf("%p\n", &slice[0]) //0x14000128000
 
     ```
+    
+	```go
+		a := 3
+		arr := [a]int{1, 2, 3} // compile error
+	
+		const aa = 3
+		arr := [aa]int{1, 2, 3} // ok
+	```
+
+14. 
