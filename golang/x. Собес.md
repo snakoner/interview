@@ -250,10 +250,10 @@
 	1. Мониторинг (Prometheus, Grafana)
 
 Если спросят “Какой стек выбрать?”, можно сказать:
-	- CI/CD: GitHub Actions, GitLab CI
-	- Тесты: Go Test, Selenium, JMeter
-	- Деплой: Docker, Kubernetes, Terraform
-	- Мониторинг: Prometheus, Grafana
+1. CI/CD: GitHub Actions, GitLab CI
+2. Тесты: Go Test, Selenium, JMeter
+3. Деплой: Docker, Kubernetes, Terraform
+4. Мониторинг: Prometheus, Grafana
 
 3. Что такое Prometheus?
 
