@@ -254,3 +254,14 @@
 - Тесты: Go Test, Selenium, JMeter
 - Деплой: Docker, Kubernetes, Terraform
 - Мониторинг: Prometheus, Grafana
+
+3. Что такое Prometheus?
+
+Prometheus – это система мониторинга и алертинга
+
+Что мониторит Prometheus?
+- CPU, RAM, диск, сеть (нагрузка серверов)
+- Запросы в API, время отклика
+- Ошибки, статус сервисов
+- Метрики Kubernetes (K8s)
+- Базы данных (PostgreSQL, MySQL)
