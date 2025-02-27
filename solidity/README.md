@@ -1,3 +1,28 @@
+### Что такое IERC20Permit?
+
+IERC20Permit добавляет метод permit, который позволяет пользователям разрешить другому адресу тратить их токены, не подписывая транзакцию с помощью обычного механизма вызова approve. Вместо этого разрешение передается с помощью подписанного сообщения, что позволяет проводить операции без использования газа.
+
+```solidity
+    function permit(
+        address owner,
+        address spender,
+        uint256 value,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external;
+
+    // Стандартные методы ERC20
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+}
+```
+
 ### IL (Impermanent Loss) в DeFi — это временная потеря стоимости ликвидности, которую поставщик ликвидности (LP) может понести при добавлении своих активов в пул на DEX (например, Uniswap, SushiSwap, Curve). 
 
 IL происходит из-за изменения цены токенов в пуле относительно их цены на момент депозита. Если цена одного токена в паре сильно растёт или падает по сравнению с другим, баланс активов в пуле изменяется из-за автоматического ребалансирования.
