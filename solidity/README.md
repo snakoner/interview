@@ -453,3 +453,28 @@ contract Test {
 // bytes4    |    bytes32
 // 0xcaf44683'0000000000000000000000000000000000000000000000000000000000000020
 ```
+
+### 34. unchecked
+По умолчанию при выполнении арифметических операций +=, -=, ++, -- EVM производит проверку на overflow/underflow. В случае возникновении overflow/underflow транзакция будет reverted. Но эту проверку можно отключить с помощью unchecked {}. Но тогда транзакция не будет откачена автоматически.
+
+``` solidity
+contract Test {
+    function testUnckecked() external pure returns (uint8) {
+        uint8 a = 0xff;
+        uint8 b = 0x02;
+
+        unchecked{
+            return a + b;    // 0x01
+        }
+    }
+
+    function testChecked() external pure returns (uint8) {
+        uint8 a = 0xff;
+        uint8 b = 0x02;
+
+        return a + b;    // reverted
+    }
+}
+```
+
+Нужно пользоваться с осторожностью, когда вы уверены, что переполнения не произойдет или когда перед арифметической операцией есть if / require, который гарантирует, что переполнения не будет.
