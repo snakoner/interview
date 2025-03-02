@@ -229,24 +229,30 @@ default { revert }
 
 ### 16. Call if know signature:
 
+> encodeWithSignature - используется, когда есть сигнатура функции, внутри вычисляется селектор.
+> encodeWithSelector - используется, когда есть реализация функции.
+
 ```solidity
 
-uint256 value = 12;
-// 1.
-bytes4 sign = bytes4(keccak256(("setValue(uint256)")));
-bytes memory data = abi.encodeWithSignature(sign, value);
-contract.call(data);
+contract Test {
+    // получить селектор можно двумя способами:
+    // bytes4 = bytes4(keccak256("test(uint256 value)"));
+    // bytes4 = this.test.selector;
 
-// 2.
-contract.call(
-     abi.encodeWithSelector(Contract.setValue.selector, 12)
-);
+    function test(uint256 value) public {}
 
-// 3.
-contract.call(
-  abi.encodeWithSelector(bytes4(keccak256("setValue(uint256)")), 12)
-);
+    // 1
+    function encodeWithSignature() external pure returns (bytes memory) {
+        bytes memory data = abi.encodeWithSignature("test(uint256)", 42);
+        return data;
+    }    
 
+    // 2
+    function encodeWithSelector() external pure returns (bytes memory) {
+        bytes memory data = abi.encodeWithSelector(this.test.selector, 42);
+        return data;
+    }
+}
 ```
 
 ### 17. Transparent, UUPS, Beacon Proxies
