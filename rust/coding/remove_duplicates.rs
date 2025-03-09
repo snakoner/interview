@@ -17,3 +17,10 @@ fn remove_duplicates(vec: &mut Vec<i32>) -> usize {
 
     pos
 }
+
+fn reverse_vector(vec: &mut Vec<i32>) {
+    let len: usize = vec.len();
+    for i in 0..len / 2 {
+        vec.swap(i, len - i - 1);
+    }
+}
