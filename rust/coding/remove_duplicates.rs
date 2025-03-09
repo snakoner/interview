@@ -1,3 +1,4 @@
+// @notice: removes duplicates from sorted array
 fn remove_duplicates(vec: &mut Vec<i32>) -> usize {
     if vec.len() == 0 {
         return 0;
