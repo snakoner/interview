@@ -111,6 +111,8 @@ for num in &v {
 }
 
 v.swap(0, 1); // v[0], v[1] = v[1], v[0]
+
+let v3 = Vec::with_capacity(10); // Вектор с предопределённой ёмкостью
 ```
 
 ### String / &str
