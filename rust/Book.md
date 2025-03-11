@@ -8,6 +8,7 @@
     - [HashMap](#hashmap)
 - [Функции, операторы, циклы](#функции-операторы-циклы)
     - [Функция](#функция)
+    - [if / else / else if](#if-else-else-if)
     - [match](#match)
     - [loops](#loops)
 
