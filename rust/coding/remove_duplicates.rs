@@ -24,3 +24,25 @@ fn reverse_vector(vec: &mut Vec<i32>) {
         vec.swap(i, len - i - 1);
     }
 }
+
+// @notice: not sorted vector
+fn unique_vector(vec: &Vec<i32>) -> Vec<i32> {
+    let mut unique: Vec<i32> = Vec::new();
+    let mut map: HashMap<i32, usize> = HashMap::new();
+
+    for i in 0..vec.len() {
+        if let Some(value) = map.get(&vec[i]) {
+            map.insert(vec[i], value + 1);
+        } else {
+            map.insert(vec[i], 1);
+        }
+    }
+
+    for (key, value) in &map {
+        if *value == 1 {
+            unique.push(*key);
+        }
+    }
+    
+    return unique;
+}
