@@ -21,6 +21,7 @@
     - [Более сложные Enum](#более-сложные-enum)
     - [Impl для Enum](#impl-для-enum)
 - [Option, Some, None](#option-some-none)
+- [Traits](#traits)
 
 
 # Сборка проекта
@@ -672,4 +673,42 @@ fn main() {
 ```
 
 Поэтому можно либо проверять значение через match, либо использовать unwrap_or(value), которое в случае если Option == None вернет значение value.
+
+
+# Traits
+В Rust `trait` – это механизм, который определяет обязательные методы для типов, которые его реализуют. Это аналог интерфейсов в других языках программирования (например, Go), но с более мощными возможностями, такими как умолчательные реализации и динамическое диспетчерирование.
+
+```rust
+trait Speaker {
+    fn speak(&self);
+}
+
+struct Dog;
+struct Cat;
+
+impl Speaker for Dog {
+    fn speak(&self) {
+        println!("Im dog");
+    }
+}
+
+
+impl Speaker for Cat {
+    fn speak(&self) {
+        println!("Im cat");
+    }
+}
+
+fn make_noise(speaker: & impl Speaker) {
+    speaker.speak();
+}
+
+fn main() {
+    let d: Dog = Dog{};
+    let c: Cat = Cat{};
+
+    make_noise(&d); // Im cat
+    make_noise(&c); // Im dog
+}
+```
 
