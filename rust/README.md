@@ -32,3 +32,40 @@ fn main() {
     println!("Address of x: {:p}", x_address); // Выводим адрес в шестнадцатеричном формате
 }
 ```
+## 3. ":?", ":#?"
+
+В Rust :? и :#? используются в формате println! и других макросах форматирования для отладки. Они связаны с Debug-форматированием.
+
+- :? — Дебажный вывод (Debug formatting):
+```rust
+#[derive(Debug)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 10, y: 20 };
+    println!("{:?}", p);  // Выведет: Point { x: 10, y: 20 }
+}
+```
+
+- :#? — Красивый (pretty) Debug:
+```rust
+#[derive(Debug)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 10, y: 20 };
+    println!("{:#?}", p);
+    /* выведет
+    Point {
+        x: 10,
+        y: 20,
+    }
+    */
+}
+```
