@@ -6,7 +6,7 @@
         - [Tuple](#tuple)
         - [Static array](#static-array)
         - [Vector](#vector)
-        - [String / &str](#string-str)
+        - [String / &str](#string--str)
     - [Преобразование базовых типов](#преобразование-базовых-типов)
     - [Константы](#константы)
     - [HashMap](#hashmap)
