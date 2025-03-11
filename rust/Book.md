@@ -29,7 +29,7 @@
 - [Traits](#traits)
     - [Что такое](#что-такое)
     - [Дефолтная реализация методов](#дефолтная-реализация-методов)
-
+- [Generic Types](#generic-types)
 
 # Сборка проекта
 ## Cargo
@@ -784,5 +784,99 @@ impl Greet for Human {} // Использует стандартную реал�
 fn main() {
     let h = Human;
     h.hello(); // Hello, world!
+}
+```
+
+
+# Generic Types
+В Rust можно использовать общие типы (`Generics`) для создания функций, структур, перечислений или типов, которые могут работать с разными типами данных. Это позволяет писать общий, переиспользуемый код, который работает с любыми типами, при этом сохраняя безопасность типов на этапе компиляции.
+
+Когда вы используете generics в функции, структуре или перечислении, rustc генерирует код для каждого конкретного типа, с которым эта функция или структура будет вызвана или использована. Этот процесс называется `мономорфизацией` (monomorphization).
+
+## Generic функции
+```rust
+fn print_value<T>(value: T) {
+    println!("{:?}", value);
+}
+
+// В print_value(42) компилятор автоматически понимает, что T — это i32, и проверяет тип.
+fn main() {
+    print_value(42);          // i32
+    print_value("Hello");     // &str
+    print_value(3.14);        // f64
+}
+```
+
+## Генерики в структурах
+```rust
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+fn main() {
+    let int_point = Point { x: 1, y: 2 }; // Point<i32>
+    let float_point = Point { x: 1.0, y: 2.0 }; // Point<f64>
+}
+```
+
+## Генерики в перечислениях
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+
+fn main() {
+    let some_number = Option::Some(42); // Option<i32>
+    let no_value: Option<i32> = Option::None; // Option<i32>
+}
+```
+
+## Ограничения на типы с помощью trait
+```rust
+use std::fmt::Debug;
+
+// T: Debug — это ограничение на тип T, которое требует, чтобы тип T реализовывал трейt Debug.
+fn print_debug<T: Debug>(value: T) {
+    println!("{:?}", value);
+}
+
+fn main() {
+    print_debug(42);       // i32, реализует Debug
+    print_debug("Hello");  // &str, реализует Debug
+    // print_debug([1, 2, 3]); // Массив не реализует Debug по умолчанию, приведёт к ошибке
+}
+```
+
+## Обобщённые методы для структуры
+struct Container<T> {
+    value: T,
+}
+
+impl<T> Container<T> {
+    fn new(value: T) -> Self {
+        Container { value }
+    }
+
+    fn get_value(&self) -> &T {
+        &self.value
+    }
+}
+
+fn main() {
+    let container = Container::new(42);
+    println!("{}", container.get_value());
+}
+
+## Множественные типы в генераках
+```rust
+struct Pair<T, U> {
+    first: T,
+    second: U,
+}
+
+fn main() {
+    let pair = Pair { first: 42, second: "Hello" };
 }
 ```
