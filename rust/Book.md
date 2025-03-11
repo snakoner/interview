@@ -97,20 +97,20 @@ for arr in arr.iter() {
 
 ### Vector
 ```rust
-let mut v: Vec<i32> = Vec::new();
-v.push(10);
-v.push(20);
-v.push(30);
-println!("{:?}", v);  // [10, 20, 30]
+let mut v1: Vec<i32> = Vec::new();
+v1.push(10);
+v1.push(20);
+v1.push(30);
+println!("{:?}", v1);  // [10, 20, 30]
 
-let v = vec![1, 2, 3, 4, 5];
-let last = v.pop();  // Удалит последний элемент и вернет его
+let mut v2 = vec![1, 2, 3, 4, 5];
+let last = v2.pop();  // Удалит последний элемент и вернет его
 
-for num in &v {
+for num in &v2 {
     println!("{}", num);
 }
 
-v.swap(0, 1); // v[0], v[1] = v[1], v[0]
+v2.swap(0, 1); // v[0], v[1] = v[1], v[0]
 
 let v3 = Vec::with_capacity(10); // Вектор с предопределённой ёмкостью
 ```
