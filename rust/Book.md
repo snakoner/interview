@@ -6,7 +6,7 @@
     - [Преобразование базовых типов](#преобразование-базовых-типов)
     - [Константы](#константы)
     - [HashMap](#hashmap)
-- [Примеры](#примеры)
+- [Функции, операторы, циклы](#функции-операторы-циклы)
 - [Заключение](#заключение)
 
 # Сборка проекта
@@ -204,4 +204,123 @@ if map.contains_key("orange") {
 7.	Использование entry для вставки, если ключ отсутствует:
 ```rust
 map.entry("grape").or_insert(10);
+```
+
+# Функции, операторы, циклы
+
+### Функция
+
+Точка входа в программу:
+```rust
+fn main() {
+}
+```
+
+```rust
+fn test(value: i8) -> i8 {
+  value + 1 // if no ; -> returns automatically
+}
+```
+
+### if / else / else if
+
+```rust
+fn main() {
+  let i: i32 = 1;
+  if i == 1 {
+    println!("true");
+  } else if i == 2 {
+    println!("false");
+  } else {
+    println!("none");
+  }
+}
+```
+
+### match
+```rust
+fn main() {
+    let x = 42;
+
+    match x {
+        0 => {
+            println!("found zero");
+        }
+        // we can match against multiple values
+        1 | 2 => {
+            println!("found 1 or 2!");
+        }
+        // we can match against ranges
+        3..=9 => {
+            println!("found a number 3 to 9 inclusively");
+        }
+        // we can bind the matched number to a variable
+        matched_num @ 10..=100 => {
+            println!("found {} number between 10 to 100!", matched_num);
+        }
+        // this is the default match that must exist if not all cases are handled
+        _ => {
+            println!("found something else!");
+        }
+    }
+}
+```
+
+### loops
+1. loop - бесконечный цикл, остановка с помощью break
+
+```rust
+    let mut i: i32 = 0;
+    loop {
+        if i == 32 {
+            break;
+        }
+
+        i += 1;
+    };
+```
+
+
+Можно возвращать значение из break:
+```rust
+    let mut i: i32 = 0;
+    let res: i32 = loop {
+        if i == 32 {
+            break i;
+        }
+
+        i += 1;
+    };
+
+    println!("{}", res); // 32
+```
+
+2. while
+
+```rust
+let mut counter: i32 = 0;
+
+while counter < 10 {
+  counter += 1;
+}
+```
+
+3. for
+```rust
+let arr: [i32; 5] = [1,2,3,4,5];
+
+for el: i32 in arr {
+  println!("{}", el);
+}
+```
+
+```rust
+for i in 0..5 {
+  println!("{}", i);
+}
+
+// 5 включается
+for i in 0..=5 {
+  println!("{}", i);
+}
 ```
