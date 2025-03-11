@@ -8,7 +8,7 @@
     - [HashMap](#hashmap)
 - [Функции, операторы, циклы](#функции-операторы-циклы)
     - [Функция](#функция)
-    - [if / else / else if](#if-else-else-if)
+    - [if](#if)
     - [match](#match)
     - [loops](#loops)
 
@@ -227,7 +227,7 @@ fn test(value: i8) -> i8 {
 }
 ```
 
-## if / else / else if
+## if
 
 ```rust
 fn main() {
