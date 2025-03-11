@@ -3,6 +3,9 @@
 - [Переменные](#переменные)
     - [Скалярные](#скалярные)
     - [Композитные](#композитные)
+        - [Tuple](#tuple)
+        - [Static arrays](#static-arrays)
+        - [Vector](#vector)
     - [Преобразование базовых типов](#преобразование-базовых-типов)
     - [Константы](#константы)
     - [HashMap](#hashmap)
@@ -63,13 +66,14 @@ let c = 4.3f32;
 ```
 
 ## Композитные:
+### Tuple
 - Кортежи: могут содержать элементы разных типов.
 ```rust
 let my_tuple: (i8, char, bool) = (1, 'f', false);
 let i_var: i8 = my_tuple.0;
 ```
 
-- Array (static)
+### Static array
 ```rust
 let arr: [i32; 3] = [1,2,3];
 println!("{:?}", arr); // [1,2,3]
@@ -90,7 +94,7 @@ for arr in arr.iter() {
 
 ```
 
-- Vector (dynamic)
+### Vector
 ```rust
 let mut v: Vec<i32> = Vec::new();
 v.push(10);
@@ -108,7 +112,7 @@ for num in &v {
 v.swap(0, 1); // v[0], v[1] = v[1], v[0]
 ```
 
-- String / &str
+### String / &str
 - `&str` – строковый срез (string slice):
   - Это ссылка на строку, которая хранится в памяти где-то еще (например, в статической памяти или внутри String):
   - Плюсы: Использует меньше памяти, не требует аллокаций в куче.
