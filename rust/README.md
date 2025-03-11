@@ -14,3 +14,12 @@ fn main() {
     println!("{:?}", v1); // [1, 2, 3]
 }
 ```
+
+## 2. Как получить адрес переменной?
+```rust
+fn main() {
+    let x: i32 = 1;
+    let p_x = &x as *const i32;
+    println!("{:p}", p_x);
+}    
+```
