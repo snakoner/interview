@@ -23,3 +23,12 @@ fn main() {
     println!("{:p}", p_x);
 }    
 ```
+
+```rust
+fn main() {
+    let mut x = 42;
+    let x_address = &mut x as *mut i32; // Получаем мутабельный указатель на переменную x
+
+    println!("Address of x: {:p}", x_address); // Выводим адрес в шестнадцатеричном формате
+}
+```
