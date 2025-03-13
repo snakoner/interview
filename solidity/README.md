@@ -559,3 +559,7 @@ function forceApprove(IERC20 token, address spender, uint256 amount) internal ov
     }
 }
 ```
+
+### functionDelegateCall
+1. Проверяет что адрес - контракт
+2. Если вызов не удался - бросает revert -> можно не использовать require() для проверки успешности вызова
