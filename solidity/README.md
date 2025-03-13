@@ -540,3 +540,22 @@ SafeERC20 обходит эту проблему, используя низко�
 - Улучшает читаемость и безопасность кода.
 
 Лучше всегда использовать ее, нежели abi.encodeWithSelector / abi.encodeWithSignature.
+
+### 39. forceApprove
+`forceApprove` — это функция, позволяющая насильно установить одобрение (approve) для ERC20-токена, даже если стандартная функция approve не работает.
+Это бывает полезно, когда контракт ERC20 не поддерживает повторный вызов approve, требуя сначала установить approve(0) перед обновлением значения.
+
+- Некоторые контракты требуют, чтобы перед изменением лимита сначала вызвали approve(0).
+- Это защищает от атак с подменой allowance в момент транзакции.
+- Но такое поведение неудобно, и для этого придумали forceApprove.
+
+```solidity
+// SafeERC20.sol
+function forceApprove(IERC20 token, address spender, uint256 amount) internal override {
+    bytes memory approvalCall = abi.encodeCall(token.approve, spender, amount);
+    if (!_callOptionalReturnBool(token, approvalCall)) {
+        _callOptionalReturn(token, abi.encodeCall(token.approve, spender, 0));
+        _callOptionalReturn(token, approvalCall);
+    }
+}
+```
