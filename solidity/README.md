@@ -563,3 +563,14 @@ function forceApprove(IERC20 token, address spender, uint256 amount) internal ov
 ### functionDelegateCall
 1. Проверяет что адрес - контракт
 2. Если вызов не удался - бросает revert -> можно не использовать require() для проверки успешности вызова
+
+### Переопределение функции из интерфейса с помощью state variable
+```solidity
+interface Parent {
+    function nonces(address owner) external view returns (uint256);
+}
+
+contract Child is Parent {
+    mapping (address => uint256) public override nonces;
+}
+```
