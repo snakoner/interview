@@ -70,3 +70,19 @@ print(result)
 10569* l
 10570  python triggers/snapshots.py
 ```
+
+
+### Event trigger
+
+```python
+
+from datetime import datetime
+
+t = SdeusdPermissionedSwapper()
+# raw = t.collect_raw_data(int(datetime(year=2025, month=3, day=14).timestamp()))
+raw = t.collect_raw_data(1733770139)
+pre = t.precompute_data(raw)
+print(raw)
+print(pre)
+
+```
