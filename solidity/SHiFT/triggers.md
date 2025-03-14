@@ -1,5 +1,5 @@
 ### snapshot example
-
+```python
 class AbracadabraProposals(SnapshotProposal):
     id = "e7bbfbcc-fece-4bf4-a153-1ad92d8373f6"
     space = "abracadabrabymerlinthemagician.eth"
@@ -8,11 +8,14 @@ class AbracadabraProposals(SnapshotProposal):
 from datetime import datetime
 
 t = AbracadabraProposals()
-raw = t.collect_raw_data(int(datetime(year=2025, month=3, day=14).timestamp()))
-raw = t.collect_raw_data(1741776619)
-print(int(datetime(year=2025, month=3, day=14).timestamp()))
+raw = t.collect_raw_data(1741787619)
+pre = t.precompute_data(raw)
+result = t.trigger_rule(pre)
 
+print(result)
+```
 
+```
 10518  export PYTHONPATH=/Users/andrejstroganov/Desktop/shift/triggers
 10519  ls
 10520  poetry --help
@@ -66,3 +69,4 @@ print(int(datetime(year=2025, month=3, day=14).timestamp()))
 10568* clear
 10569* l
 10570  python triggers/snapshots.py
+```
