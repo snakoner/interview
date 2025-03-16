@@ -182,6 +182,17 @@ function createContract() external {
 > Низкоуровневый язык, можно напрямую работать со storage, memory
 31. Как проверить, является ли адрес контрактом?
 > bool isContract = addr.code.length != 0;
+```solidity
+function isContract(address addr) external pure returns (bool) {
+  uint256 size;
+  assembly {
+    size := extcodesize()
+  }
+
+  return size == 0;
+}  
+```
+
 32. sstore, sload, mstore, mload
 >   sstore - запись в slot, sload - чтение из slot, mstore, mload - с memory
 33. Как из ассемблера получить сигнатуру вызванной функции?
