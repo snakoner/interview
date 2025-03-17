@@ -1,3 +1,15 @@
+### USDt0
+
+1. Ethereum → Chain B:
+- USDT Adapter locks USDT on Ethereum.
+- A LayerZero message triggers USDT0 OFT on Chain B to mint equivalent USD₮0.
+2. Chain B → Chain A:
+- USDT0 OFT burns USD₮0 on Chain B.
+- A message triggers USDT0 OFT on Chain A to mint the equivalent.
+3. Chain A → Ethereum:
+- USDT0 OFT burns USD₮0 on Chain A.
+- A message instructs the USDT Adapter to unlock USD₮ on Ethereum.
+
 Endpoint(contract EndpointV2) обрабатывает входящие и исходящие сообщения, все сообщения в процессе отправки оборачиваются в пакеты.
 
 Endpoint выполняет следующие задачи:
