@@ -1,10 +1,10 @@
 ### before testing event trigger
 Need to run event service:
 ```
+cd ~/Desktop/shift/triggers/src
 poetry env activate
 source /Users/andrejstroganov/Library/Caches/pypoetry/virtualenvs/triggers-Cpqd3AL9-py3.11/bin/activate
 source /Users/andrejstroganov/Desktop/shift/triggers/rpcs.sh
-cd ~/Desktop/shift/triggers/src:
 python events/app.py
 ```
 
