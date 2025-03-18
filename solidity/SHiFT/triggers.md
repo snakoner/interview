@@ -1,5 +1,5 @@
 ### before testing event trigger
-from triggers/src:
+Need to run event service:from triggers/src:
 ```
 python events/app.py
 ```
