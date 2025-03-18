@@ -588,3 +588,11 @@ contract Child is Parent {
     mapping (address => uint256) public override nonces;
 }
 ```
+
+### 41. Затраты на SSTORE/SLOAD
+|Действие|Стоимость|
+|---|-----|
+|SLOAD|~2'100|
+|SSTORE, 0 -> X|20'000|
+|SSTORE, X -> Y|5'000|
+|SSTORE, X -> 0|15'000|
