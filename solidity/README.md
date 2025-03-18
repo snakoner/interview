@@ -38,6 +38,26 @@ IERC20Permit(token).permit(
 IERC20(token).transferFrom(bob, alice, 100);
 ```
 
+EOA подписывает следующее сообщение:
+```solidity
+keccak256(
+    abi.encodePacked(
+        "\x19\x01",
+        DOMAIN_SEPARATOR,
+        keccak256(
+            abi.encode(
+                keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"),
+                owner,
+                spender,
+                value,
+                nonce,
+                deadline
+            )
+        )
+    )
+);
+```
+
 ### 2. IL (Impermanent Loss) в DeFi
 
 Это временная потеря стоимости ликвидности, которую поставщик ликвидности (LP) может понести при добавлении своих активов в пул на DEX (например, Uniswap, SushiSwap, Curve). 
