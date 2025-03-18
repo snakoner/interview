@@ -1,3 +1,9 @@
+### before testing event trigger
+from triggers/src:
+```
+python events/app.py
+```
+
 ### snapshot example
 ```python
 class AbracadabraProposals(SnapshotProposal):
