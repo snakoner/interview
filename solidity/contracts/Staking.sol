@@ -7,7 +7,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract Staking {
     using SafeERC20 for IERC20;
 
-    error ZeroDepositAmount();
+    error ZeroStakeAmount();
     error ZeroWithdrawAmount();
     error InsufficientWithdrawAmount();
 
@@ -36,17 +36,17 @@ contract Staking {
     }
 
     function stake(uint256 amount) external {
-        require(amount != 0, ZeroDepositAmount());
-        StakeInfo storage stake = stakes[msg.sender];
+        require(amount != 0, ZeroStakeAmount());
+        StakeInfo storage _stake = stakes[msg.sender];
 
-        uint256 stakeAmount = stake.amount;
+        uint256 stakeAmount = _stake.amount;
         if (stakeAmount != 0)
-            stake.rewardAmount += calculateReward(stakeAmount, stake.startTime);
+            _stake.rewardAmount += calculateReward(stakeAmount, _stake.startTime);
 
-        stake.amount += amount;
-        stake.startTime = block.timestamp;
+        _stake.amount += amount;
+        _stake.startTime = block.timestamp;
 
-        token.safeTransferFrom(msg.sender, address(this), amount);
+        stakingToken.safeTransferFrom(msg.sender, address(this), amount);
 
         emit Staked(msg.sender, amount);
     }
