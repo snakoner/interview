@@ -24,6 +24,20 @@ interface IERC20Permit {
 }
 ```
 
+Допустим, Bob хочет разрешить Alice перевести 100 токенов, но не хочет делать approve, так как это требует комиссии. Он подписывает permit off-chain и передаёт Alice.
+Alice затем выполняет:
+
+```solidity
+IERC20Permit(token).permit(
+    bob,            // Владелец токенов
+    alice,          // Кому разрешаем тратить
+    100,            // Количество токенов
+    deadline,       // Срок действия подписи
+    v, r, s         // Подпись Bob'а
+);
+IERC20(token).transferFrom(bob, alice, 100);
+```
+
 ### 2. IL (Impermanent Loss) в DeFi
 
 Это временная потеря стоимости ликвидности, которую поставщик ликвидности (LP) может понести при добавлении своих активов в пул на DEX (например, Uniswap, SushiSwap, Curve). 
