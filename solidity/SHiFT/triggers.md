@@ -48,3 +48,11 @@ print(raw)
 print(pre)
 
 ```
+
+
+### after approve
+1. merge (no access now)
+2. pipeline
+3. deploy to prod
+4. test manually in backoffice
+5. write to `defi-workspace` 
