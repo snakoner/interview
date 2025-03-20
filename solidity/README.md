@@ -619,3 +619,41 @@ contract Child is Parent {
 
 
 ### 42, В Solidity локальные переменные внутри функций по умолчанию инициализируются значением по умолчанию (zero-value), если явно не заданы.
+
+### 43. Разбор функции abstract contract Proxy:_delegate(address implementation)
+```solidity
+    function _delegate(address implementation) internal virtual {
+        assembly {
+            // copy msg.data to memory:
+            // arg0 - offset in memory start copy to
+            // arg1 - offset in calldata start copy from
+            // arg2 - size of data to copy
+            calldatacopy(0, 0, calldatasize()) 
+
+            // Call the implementation.
+            // arg0: gas_left for delegate call
+            // arg1: address of implementation
+            // arg2: pointer to data in memory that will be passed
+            // arg3: length of data from arg2
+            // arg4: offset in memory where output data will be written
+            // arg5: length of output data
+            let result := delegatecall(gas(), implementation, 0, calldatasize(), 0, 0)
+
+            // Copy the returned data.
+            // arg0: memory offset to copy to
+            // arg1: returndata offset to copy from
+            // arg2: length of return data to copy
+            returndatacopy(0, 0, returndatasize())
+
+            switch result
+            // delegatecall returns 0 on error.
+            case 0 {
+                revert(0, returndatasize())
+            }
+            default {
+                return(0, returndatasize())
+            }
+        }
+    }
+
+```
