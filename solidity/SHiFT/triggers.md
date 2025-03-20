@@ -55,4 +55,4 @@ print(pre)
 2. pipeline
 3. deploy to prod
 4. test manually in backoffice
-5. write to `defi-workspace`: '@Defi_auditor <link>name triggers</link> are done. Pls, verify.'
+5. write to `defi-workspace`: '@Defi_auditor [ref]name triggers[/ref] are done. Pls, verify.'
