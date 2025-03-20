@@ -104,7 +104,7 @@ executeRootBundle                                      msg.sender = attacker(EOA
 Possible attack vector in single transaction (all liquidity is on Hub contract):
 1. set new `adapter` in setCrossChainContracts
 3. attacker calls executeRootBundle(inside we call internal function _sendTokensToChainAndUpdatePooledTokenTrackers()):
-4. in `adapter`.delegatecall (in context of msg.sender - attacker):
+4. in `adapter`.delegatecall (in context of hub contract):
 
 ```solidity
 // this function is defined in new adapter contract
