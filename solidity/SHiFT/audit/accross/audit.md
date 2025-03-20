@@ -25,7 +25,7 @@ int256 utilizedReserves = 3081310457640993279566
 
 
 ```solidity
-contract Attack {
+contract Simulation {
     uint256 undistributedLpFees = 2495510634873076907;
     uint256 liquidReserves = 15593038486308420640717;
     uint256 totalSupply = 17029603465356381254203;
@@ -66,7 +66,7 @@ contract Attack {
 // 3. l1Token = 91549
 ```
 
-> _updateAccumulatedLpFees(pooledToken) and _sync(l1Token) don't affect on exchangeRate, if only haircutReserves() was called
+> _updateAccumulatedLpFees(pooledToken) and _sync(l1Token) don't affect on exchangeRate, \if only haircutReserves() was called
         
 
 
