@@ -28,7 +28,7 @@ Possible vector attack:
 contract Gauge {
 	function deposit(uint256 _value, address _addr) external {
 		// here is msg.sender == address(CurveVault) with _amount balance
-		token.transferFrom(msg.sender, <SOME_ADDRESS or address(this)>, _value);
+		token.transfer(<SOME_ADDRESS or address(this)>, _value);
 	}
 }
 ```
