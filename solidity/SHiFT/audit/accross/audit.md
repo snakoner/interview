@@ -237,3 +237,6 @@ contract Finder is Ownable {
     }
 // ...
 ```
+
+### setBond
+No affects liquidity pool
