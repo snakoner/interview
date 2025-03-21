@@ -657,3 +657,39 @@ contract Child is Parent {
     }
 
 ```
+### Можно ли подменить адрес интерфейса и вызвать read func вместо write?
+Нет, нельзя:
+
+```solidity
+contract Adapter1 {
+    bool public value;
+    function func() external view returns (bool) {
+        return value;
+    }
+}
+
+contract Adapter2 {
+    bool public value;
+    function func() external  {
+        value = true;
+    }
+}
+
+interface IAdapter {
+    function func() external view returns (bool);
+}
+
+contract Test {
+    IAdapter public adapter;
+
+    function setAdapter(address _adapter) external {
+        adapter = IAdapter(_adapter);
+    }
+
+    function callFunc() external {
+        adapter.func(); // adapter == Adapter1: OK
+        adapter.func(); // adapter == Adapter2: revert
+    }
+}
+```
+
