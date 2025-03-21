@@ -239,4 +239,4 @@ contract Finder is Ownable {
 ```
 
 ### setBond
-No affects liquidity pool
+No affects liquidity pool, only on bridging
