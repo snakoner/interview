@@ -27,6 +27,7 @@ print(result)
 
 ```
 // can be usefull
+// poetry add redis <- if problems with import (e.g. multicall)
 10527  poetry env use 3.11
 10540  export PYTHONPATH=/Users/andrejstroganov/Desktop/shift/triggers/src
 10547  poetry env activate
