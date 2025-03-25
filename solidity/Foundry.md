@@ -68,3 +68,30 @@ export FOUNDRY_RPC_URL=${ETHEREUM_RPC}
 ```bash
 anvil --fork-url $FOUNDRY_RPC_URL --fork-block-number 22122478
 ```
+
+6. Чтобы запускать тест, нужно, чтобы имя функции test[FuncName]
+
+7. Как минтить токены?
+```solidity
+// mint
+myWallet = address(this);
+bytes32 slot;
+
+// for certain token have to find out basic slot for mapping (address => uint256) balances:
+slot = keccak256(abi.encode(myWallet, uint256(3)));
+vm.store(GHO, slot, bytes32(uint256(10 ** 24)));
+uint256 balance = IERC20(GHO).balanceOf(myWallet);
+```
+8. Выполнение транзакции от другого адреса:
+```solidity
+vm.startPrank(ADDRESS);
+vm.stopPrank(); // обязательно, если хотим переключить на другой адрес дальше
+vm.startPrank(myWallet);
+```
+
+9. Создание форка от mainnet:
+```bash
+function setUp() public {
+    vm.createSelectFork(vm.envString("FOUNDRY_RPC_URL"));
+}
+```
