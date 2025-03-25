@@ -32,6 +32,8 @@ print(result)
 10540  export PYTHONPATH=/Users/andrejstroganov/Desktop/shift/triggers/src
 10547  poetry env activate
 10557  source /Users/andrejstroganov/Library/Caches/pypoetry/virtualenvs/triggers-Cpqd3AL9-py3.11/bin/activate
+
+export PYTHONPATH="/Users/andrejstroganov/Desktop/shift/git/triggers/src:$PYTHONPATH"
 ```
 
 
