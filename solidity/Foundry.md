@@ -95,3 +95,8 @@ function setUp() public {
     vm.createSelectFork(vm.envString("FOUNDRY_RPC_URL"));
 }
 ```
+
+10. Намайнить блоков:
+```bash
+vm.warp(block.timestamp + 1 days);
+```
