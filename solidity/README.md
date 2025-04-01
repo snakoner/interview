@@ -693,3 +693,8 @@ contract Test {
 }
 ```
 
+### Order of functions by access
+- external, ezternal view/pure
+- public, public view/pure
+- internal, same
+- private, same
