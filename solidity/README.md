@@ -693,8 +693,21 @@ contract Test {
 }
 ```
 
-### Order of functions by access
+### 45. Order of functions by access
 - external, ezternal view/pure
 - public, public view/pure
 - internal, same
 - private, same
+
+### 46. Расположение переменных родительского и дочернего контрактов
+```solidity
+contract Parent {
+    uint256 public a = 10;  // storage slot 0
+    uint256 public b = 20;  // storage slot 1
+}
+
+contract Child is Parent {
+    uint256 public c = 30;  // storage slot 2
+    uint256 public d = 40;  // storage slot 3
+}
+```
