@@ -711,3 +711,19 @@ contract Child is Parent {
     uint256 public d = 40;  // storage slot 3
 }
 ```
+
+### 47. Разница между abi.encode и abi.encodePacked
+```solidity
+contract EncodeVSEncodePacked {
+    function encode() external pure returns (bytes memory) {
+        // 0x112233'445566'778899
+        return abi.encodePacked(bytes3(0x112233), bytes3(0x445566), bytes3(0x778899));
+    }
+    function encodePacked() external pure returns (bytes memory) {
+        // 0x1122330000000000000000000000000000000000000000000000000000000000'
+        // 0x4455660000000000000000000000000000000000000000000000000000000000'
+        // 0x7788990000000000000000000000000000000000000000000000000000000000
+        return abi.encodePacked(bytes3(0x112233), bytes3(0x445566), bytes3(0x778899));
+    }
+}
+```
