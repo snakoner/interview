@@ -87,3 +87,21 @@ fn main() {
 - Rust отслеживает владельца на этапе компиляции.
 - Как только владелец умирает, компилятор вставляет drop().
 - Никаких “паузы на сборку мусора”, всё происходит сразу и точно.
+
+## 5. Пример с Box
+```rust
+struct Test {
+    value: Option<Box<i32>>,
+}
+
+fn main() {
+    let mut test = Test{
+        value: Some(Box::new(1)),
+    };
+    // Вопроc: когда очистится память под 1?
+    println!("{}", test.value.unwrap()); // move, здесь передается владение функции(макросу)
+    // println!("{}", test.value.unwrap()); // !!!! error: value used here after move
+    test.value = Some(Box::new(2)); // test.value - владелец значения 2 в heap
+    println!("{}", test.value.unwrap());
+}
+```
