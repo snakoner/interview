@@ -105,3 +105,28 @@ fn main() {
     println!("{}", test.value.unwrap());
 }
 ```
+
+## 6. Пример с list
+```rust
+    let mut list: Option<Box<ListNode>> = Some(Box::new(ListNode::new(1)));
+    if let Some(mut node) = list { // moved to node here
+        if node.next.is_none() {
+            node.next = Some(Box::new(ListNode::new(2)));
+        }
+    }
+
+    println!("{:?}", list); // error: value borrowed here after partial move
+```
+
+Если мы хотим, чтобы владение не было передано в node, нужно сделать ref mut:
+
+```rust
+    let mut list: Option<Box<ListNode>> = Some(Box::new(ListNode::new(1)));
+    if let Some(ref mut node) = list { // moved to node here
+        if node.next.is_none() {
+            node.next = Some(Box::new(ListNode::new(2)));
+        }
+    }
+
+    println!("{:?}", list); // Ok
+```
