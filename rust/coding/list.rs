@@ -40,7 +40,7 @@ impl List {
                 node.next = Some(new_node);
                 return;
             }
-            current = &mut node.next; // переходим к следующему узлу
+            current = &mut node.next; 
         }
     }
 
