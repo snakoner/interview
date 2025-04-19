@@ -51,9 +51,9 @@ fn main() {
 
     println!("{}", stack.to_string());
 
-    while stack.empty() {
+    while !stack.empty() {
         let val: Option<i32> = stack.pop();
-        println!("{:?}", val);
+        println!("{:?}", val.unwrap());
     }
 
     println!("{}", stack.len());
