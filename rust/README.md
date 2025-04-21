@@ -139,3 +139,17 @@ let mut s = String::from("hello");
 let ref_s1 = &mut s;
 let ref_s2 = &mut s; // error
 ```
+
+```rust
+let mut s = String::from("hello");
+let ref_s1 = &s;
+let ref_s2 = &s; // ok, unmutable is allowed
+```
+
+```rust
+let mut s = String::from("hello");
+let ref_s1 = &s;
+let ref_s2 = &mut s; // error, not allowed to have mut and unmut refs in one time
+```
+
+
