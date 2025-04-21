@@ -163,3 +163,17 @@ println!("{r1} and {r2}");
 let r3 = &mut s; // no problem
 println!("{r3}");
 ```
+
+## 8. Если функция принимает &str, то можно передавать как &String, так и &str:
+
+```rust
+fn func(s: &str) {
+    println!("{s}");
+}
+
+fn main() {
+    let s = String::from("xxx");
+    func(&s);
+    func(&s[..1]);
+}   
+```
