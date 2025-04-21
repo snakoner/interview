@@ -78,6 +78,5 @@ fn main() {
         }
     }
 
-
-    println!("Number of errors: {errors}");
+    assert!(errors == 0);
 }   
