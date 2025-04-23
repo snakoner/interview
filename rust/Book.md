@@ -118,6 +118,18 @@ for num in &v2 {
 v2.swap(0, 1); // v[0], v[1] = v[1], v[0]
 
 let v3 = Vec::with_capacity(10); // Вектор с предопределённой ёмкостью
+
+// value is &i32
+for value in v1,iter() {
+    println!("{value}");
+}
+
+// value is &mut i32, can be changed
+for value in v1,iter_mut() {
+    *value = 3;
+    println!("{value}"); // 3
+}
+
 ```
 
 ### String / &str
