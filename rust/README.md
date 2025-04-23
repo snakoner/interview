@@ -73,13 +73,13 @@ fn main() {
 
 ## 4. Срезы
 ```rust
-    let mut vec = vec![1,2,3,4];
-    let mut slice = &mut vec[0..2]; // изменяемый срез, который указывает на те же данные, что и vec
+let mut vec = vec![1,2,3,4];
+let mut slice = &mut vec[0..2]; // изменяемый срез, который указывает на те же данные, что и vec
 
-    slice[0] = 100;
+slice[0] = 100;
 
-    println!("{:?}", slice); // [100, 2]
-    println!("{:?}", vec); // [100, 2, 3, 4]
+println!("{:?}", slice); // [100, 2]
+println!("{:?}", vec); // [100, 2, 3, 4]
 
 ```
 
@@ -108,27 +108,27 @@ fn main() {
 
 ## 6. Пример с list
 ```rust
-    let mut list: Option<Box<ListNode>> = Some(Box::new(ListNode::new(1)));
-    if let Some(mut node) = list { // moved to node here
-        if node.next.is_none() {
-            node.next = Some(Box::new(ListNode::new(2)));
-        }
+let mut list: Option<Box<ListNode>> = Some(Box::new(ListNode::new(1)));
+if let Some(mut node) = list { // moved to node here
+    if node.next.is_none() {
+        node.next = Some(Box::new(ListNode::new(2)));
     }
+}
 
-    println!("{:?}", list); // error: value borrowed here after partial move
+println!("{:?}", list); // error: value borrowed here after partial move
 ```
 
 Если мы хотим, чтобы владение не было передано в node, нужно сделать ref mut:
 
 ```rust
-    let mut list: Option<Box<ListNode>> = Some(Box::new(ListNode::new(1)));
-    if let Some(ref mut node) = list { // moved to node here
-        if node.next.is_none() {
-            node.next = Some(Box::new(ListNode::new(2)));
-        }
+let mut list: Option<Box<ListNode>> = Some(Box::new(ListNode::new(1)));
+if let Some(ref mut node) = list { // moved to node here
+    if node.next.is_none() {
+        node.next = Some(Box::new(ListNode::new(2)));
     }
+}
 
-    println!("{:?}", list); // Ok
+println!("{:?}", list); // Ok
 ```
 
 ## 7. Ограничение на количество &mut 
@@ -184,3 +184,14 @@ fn main() {
 |Some(val) | i32 | перемещает значение|
 |Some(ref val) | &i32 | достает ссылку, значение не перемещается|
 |Some(ref mut val) | &mut i32 | достает изменяемую ссылку, значение не перемещается|
+
+
+## 10. Как читать из stdin:
+```rust
+fn main() {
+    let mut input_string = String::new();
+    std::io::stdin().read_line(&mut input_string).expect("Cant read");
+
+    println!("{input_string}");
+}
+```
