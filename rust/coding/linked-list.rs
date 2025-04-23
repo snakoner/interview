@@ -9,6 +9,8 @@ impl ListNode {
     }
 }
 
+// First impl
+
 struct List {
     head: Option<Box<ListNode>>,
     size: i32,
@@ -61,6 +63,102 @@ impl List {
 
     fn empty(&self) -> bool {
         self.len() == 0
+    }
+}
+
+// second impl
+
+struct List2 {
+    head: Option<Box<ListNode>>,
+    size: usize
+}
+
+impl List2 {
+    fn new() -> Self {
+        Self { head: None, size: 0 }
+    }
+
+    fn push(&mut self, value: i32) {
+        let mut new_node = Box::new(ListNode::new(value));
+        self.size += 1;
+        if self.head.is_none() {
+            self.head = Some(new_node);
+            return;
+        }
+
+        let head = self.head.take();
+        new_node.next = head;
+        self.head = Some(new_node);
+    }
+
+    fn print(&self) {
+        let mut current = self.head.as_ref();
+        while let Some(node) = current {
+            print!("{} ", node.value);
+            current = node.next.as_ref();
+        }
+
+        println!();
+    }
+
+    fn top(&self) -> Option<i32> {
+        let mut node = &self.head;
+        if node.is_none() {
+            return None;
+        }
+
+        let value = (node.as_ref()).unwrap().value;
+        return Some(value);
+    }
+
+    fn len(&self) -> usize {
+        self.size
+    }
+
+    fn empty(&self) -> bool {
+        self.len() == 0
+    }
+
+    fn pop(&mut self) {
+        if self.head.is_none() {
+            return;
+        }
+
+        if self.len() == 1 {
+            self.size = 0;
+            self.head.take();
+            return;
+        }
+
+        self.size -= 1;
+        let head = self.head.take();
+        let mut next = head.unwrap().next; 
+        self.head = next.take();
+    }
+}
+
+
+fn main() {
+    let mut list: List2 = List2::new();
+    for i in 0..5 {
+        list.push(i);
+    }
+
+    list.print();
+    let top = list.top();
+    match top {
+        Some(value) => println!("value is: {value}"),
+        None => println!("Value is None"),
+    }
+
+    while !list.empty() {
+        let val = list.top();
+        match val {
+            Some(_val) => println!("{_val}"),
+            None => break,
+        }
+
+        list.pop();
     }
 }
 
