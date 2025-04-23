@@ -565,11 +565,21 @@ fn main() {
     println!("{:?}", s); // error, s in moved
 ```
 
+но:
+```rust
+    let mut s: &String = &String::from("xxx");
+    let mut op_s: Option<&String> = Some(s);
+    let mut x = op_s.unwrap();
+
+    println!("{:?}", op_s.unwrap()); // ok
+```
+
 ```rust
     let mut v: Option<&[i32; 2]> = Some(&[1,2]);
     let moved_v = v.unwrap();
     println!("{:?}", v); // ok
 ```
+
 
 
 
