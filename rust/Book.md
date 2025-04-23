@@ -20,6 +20,7 @@
 
 - [Ownership](#ownership)
     - [Примеры владения](#примеры-владения)
+    - [Unwrap](#unwrap)
     - [Итого](#итого)
 - [Struct, impl, enum](#struct-impl-enum)
     - [Struct](#struct)
@@ -554,6 +555,24 @@ fn main() {
 - Передача переменной в функцию или присваивание перемещает (move) её.
 - Используйте ссылки &, если хотите передать данные без потери владения.
 - Используйте &mut, если хотите изменить данные без передачи владения.
+
+## Unwrap
+Перемещается ли значение после unwrap:
+```rust
+    let mut s = Some(String::from("xxx"));
+    let mut x = s.unwrap();
+
+    println!("{:?}", s); // error, s in moved
+```
+
+```rust
+    let mut v: Option<&[i32; 2]> = Some(&[1,2]);
+    let moved_v = v.unwrap();
+    println!("{:?}", v); // ok
+```
+
+
+
 
 # Struct, impl, enum
 ## Struct
