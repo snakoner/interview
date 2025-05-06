@@ -59,3 +59,8 @@ module counter::example {
     }
 }
 ```
+
+### Сборка и Тестирование
+1. sui move build
+2. sui move test
+3. sui move test counter (will call only #test with 'counter' word in function name)
