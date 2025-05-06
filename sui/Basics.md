@@ -29,8 +29,8 @@ module counter::example {
         id: UID,
         counter: u64,
     }
-
-    fun init(ctx: &mut TxContext) {
+    // конструктор, обязательно с названием init
+    fun init(ctx: &mut TxContext) { 
         let counter = Counter {
             id: object::new(ctx),
             counter: 0,
