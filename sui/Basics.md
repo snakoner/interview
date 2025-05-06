@@ -57,6 +57,35 @@ module counter::example {
         let dummy_address = @0xCAFE;
         transfer::transfer(counter, dummy_address);
     }
+
+    // эмуляция транзакция с помощью test_scenario
+    #[test]
+    fun test_counter_transactions() {
+        use sui::test_scenario;
+        let initial_owner = @0xCAFE;
+        let final_owner = @0xFACE;
+
+        let mut scenario = test_scenario::begin(initial_owner);
+        {
+            let counter  = counter_create(scenario.ctx());
+            transfer::public_transfer(counter, initial_owner);
+        };
+
+        scenario.next_tx(initial_owner);
+        {
+            let counter = scenario.take_from_sender<Counter>();
+            transfer::public_transfer(counter, final_owner);
+        };
+
+        scenario.next_tx(final_owner);
+        {
+            let counter = scenario.take_from_sender<Counter>();
+            assert!(counter.counter == counter.counter(), 1);
+            scenario.return_to_sender(counter);
+        };
+
+        scenario.end();
+    }
 }
 ```
 
