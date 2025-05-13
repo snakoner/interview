@@ -18,3 +18,25 @@
 - public fun - может быть вызвана только из других Move-функций
 - public entry fun - можно вызывать напрямую через tx
 
+#### 4. merge tokens, split tokens
+
+##### merge
+Сливает несколько объектов Coin<T> в один общий объект, суммируя их значения:
+
+```move
+let merged = coin::merge(vector[coin1, coin2], ctx);
+```
+
+- coin1 = 1 SUI
+- coin2 = 2 SUI
+- merged = 3 SUI (новый объект, coin1 и coin2 уничтожаются)
+
+##### split
+Разделяет один Coin<T> на два: один с заданной суммой, второй — с остатком.
+
+```move
+let part = coin::split(&mut my_coin, 1_000_000_000, ctx); // 1 SUI
+```
+
+- my_coin было 3 SUI → станет 2 SUI
+- part будет 1 SUI
