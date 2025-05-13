@@ -1,3 +1,3 @@
-### Что такое let Counter { id, owner: _, value: _ } = counter;
+### 1. Что такое let Counter { id, owner: _, value: _ } = counter;
 
 Эта запись на языке Move (и в частности в Sui Move) — это деструктуризация структуры, то есть разложение полей структуры Counter на отдельные переменные.
