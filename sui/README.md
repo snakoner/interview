@@ -55,3 +55,43 @@ public fun get_time(clock: &Clock): u64 {
   clock.timestamp_ms() / 1000
 }
 ```
+
+### 7. Function visibility
+
+
+### 8. key, store, copy, drop
+#### key
+Обозначает, что структура — объект, хранящийся в глобальном хранилище.
+
+Требуется для использования с:
+- object::new
+- transfer::transfer
+- borrow_global, borrow_global_mut
+- object::id, UID
+  
+Без key нельзя сохранить объект в блокчейн.
+
+#### store
+Разрешает сохранять структуру в хранилище, например:
+- в глобальные объекты
+- в поля других структур
+
+Если у типа нет store, ты не можешь вложить его в **объект** или **vector**.
+
+#### copy
+Разрешает копировать значения этого типа.
+
+В структуре с модификатором copy не может быть UID, object, vector<Coin<T>>
+
+#### drop
+Возможность удалять объект неявно.
+```move
+struct SensitiveData {
+    secret: u64,
+}
+
+// Нельзя просто проигнорировать:
+let data = get_secret(); // возвращает SensitiveData: value not used and doesn't have drop ability
+```
+
+
