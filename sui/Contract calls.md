@@ -29,3 +29,8 @@ sui keytool import suiprivkey1... ed25519
 ```bash
 sui client split-coin --coin-id 0x8549ffc5fa5316754d833fe186685c19ee05aac225064a2c572a62c0110f78de --amounts 1000000
 ```
+
+5. split-coin
+```bash
+sui client split-coin --coin-id 0x8549ffc5fa5316754d833fe186685c19ee05aac225064a2c572a62c0110f78de --amounts 100000 --gas 0x931d43744f0d0498725b5c37b901217498d5127ed021d233ccbeacafb132fb31 --gas-budget 10000000
+```
