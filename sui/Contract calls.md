@@ -19,3 +19,8 @@ module counter::counter {
     }
 }
 ```
+
+3. Добавление приватника:
+```bash
+sui keytool import suiprivkey1... ed25519
+```
