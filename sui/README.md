@@ -94,4 +94,8 @@ struct SensitiveData {
 let data = get_secret(); // возвращает SensitiveData: value not used and doesn't have drop ability
 ```
 
+### 9. entry 
+An **entry function** can be called in PTBs but not in other Sui packages.
+
+### 10. friend 
 
