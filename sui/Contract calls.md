@@ -24,3 +24,8 @@ module counter::counter {
 ```bash
 sui keytool import suiprivkey1... ed25519
 ```
+
+4. Разделение монет:
+```bash
+sui client split-coin --coin-id 0x8549ffc5fa5316754d833fe186685c19ee05aac225064a2c572a62c0110f78de --amounts 1000000
+```
