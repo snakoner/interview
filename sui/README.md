@@ -99,3 +99,6 @@ An **entry function** can be called in PTBs but not in other Sui packages.
 
 ### 10. friend 
 
+
+### 11. table.borrow(key) в случае, если key нет вызовет transaction revert
+Чтобы проверить есть ли ключ в table, нужно table::contains(&t, key) -> {true, false}
