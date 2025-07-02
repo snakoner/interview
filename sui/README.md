@@ -105,3 +105,16 @@ An **entry function** can be called in PTBs but not in other Sui packages.
 ```move
  let is_contains = table::contains(&t, key)
 ```
+
+### 12. Move.toml
+```bash
+[package]
+name = "suilend"
+version = "0.0.1"
+published-at = "0x43d25be6a55db4e7cc08dd914b8326e7d56fb64c67f0fb961a349e2872f4cc08" # last version
+
+
+[addresses]
+sui = "0x2"
+# suilend = "0x0"
+suilend = "0xf95b06141ed4a174f239417323bde3f209b972f5930d8521ea38a52aff3a6ddf" # version 1
