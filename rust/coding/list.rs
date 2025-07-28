@@ -1,58 +1,72 @@
-
 #[derive(Debug)]
 struct ListNode {
     next: Option<Box<ListNode>>,
-    value: i32
-}
-
-impl ListNode {
-    fn new(value: i32) -> Self {
-        Self { next: None, value: value }
-    }
+    value: i32,
 }
 
 #[derive(Debug)]
 struct List {
     head: Option<Box<ListNode>>,
-    size: usize
+    size: usize,
 }
+
 
 impl List {
     fn new() -> Self {
-        Self { head: None, size: 0 }
-    }
-
-    fn len(&self) -> usize {
-        self.size
+        Self { head: None, size: 0, }
     }
 
     fn push(&mut self, value: i32) {
-        self.size += 1;
-        let new_node = Box::new(ListNode::new(value));
-        if let None = self.head {
-            self.head = Some(new_node);
-            return;
-        }
+        let new_node = Box::new(ListNode{
+            next: self.head.take(),
+            value: value,
+        });
 
-        let mut current = &mut self.head;
-        while let Some(ref mut node) = *current {
-            if node.next.is_none() {
-                node.next = Some(new_node);
-                return;
-            }
-            current = &mut node.next; 
-        }
+        self.head = Some(new_node);
+        self.size += 1;
     }
 
-    fn println(&mut self) {
-        let mut current = &mut self.head;
-        while let Some(ref mut node) = current {
-            print!("{} ", node.value);
-            current = &mut node.next;
-        }
+    fn empty(&self) -> bool {
+        self.size == 0
+    }
+
+    fn size(&self) -> usize {
+        self.size
     }
 
     fn pop(&mut self) {
+        if self.empty() {
+            return;
+        }
 
+        self.head = self.head.take().unwrap().next;
+        self.size -= 1;
     }
+
+    fn print(&self) {
+        let mut current_node = self.head.as_ref();
+        while let Some(node) = current_node {
+            println!("{}", node.value);
+            current_node = node.next.as_ref();
+        }
+    }
+}
+
+
+
+
+fn main() {
+    let mut list = List::new();
+
+    for i in 0..10 {
+        list.push(i);
+    }
+
+    list.print();
+
+    while !list.empty() {
+        list.pop();
+    }
+
+    list.print();
 }
