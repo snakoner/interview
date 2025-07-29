@@ -1,28 +1,31 @@
 use std::collections::HashMap;
 
-fn word_count(s: &str, sep: char) -> HashMap<String, usize> {
-    let mut res_s: String = String::new();
-    let mut hm: HashMap<String, usize> = HashMap::new();
-    for ch in s.chars() {
-        if ch == sep {
-            *hm.entry(res_s.clone()).or_insert(0) += 1;
-            res_s.clear();
-        } else {
-            res_s.push(ch);
+fn words_count(s: &str) -> HashMap<&str, usize> {
+    let mut hm: HashMap<&str, usize> = HashMap::new();
+    let mut pos = 0;
+    let mut prev_char = false;
+    for (i, ch) in s.chars().enumerate() {
+        if ch == ' ' {
+            if prev_char {
+                *hm.entry(&s[pos..i]).or_insert(0) += 1;
+            }
+            
+            pos = i + 1;
+            prev_char = false;
+            continue;
         }
+        prev_char = true;
     }
 
-    if res_s.len() != 0 {
-            *hm.entry(res_s.clone()).or_insert(0) += 1;
+    if pos != s.len() {
+        *hm.entry(&s[pos..]).or_insert(0) += 1;
     }
 
     hm
 }
 
-
-
 fn main() {
-    let s = "Hello my friend friend friend";
+    let s = String::from("Hello my friend friend friend");
 
-    println!("{:?}", word_count(&s, ' '));
+    println!("{:?}", words_count(&s, ' '));
 }
