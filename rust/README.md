@@ -48,6 +48,10 @@ struct Point {
 fn main() {
     let p = Point { x: 10, y: 20 };
     println!("{:?}", p);  // Выведет: Point { x: 10, y: 20 }
+
+    // also can write
+    let vec = vec![1,2,3,4,5];
+    println!("{vec:?}"); // [1,2,3,4,5]
 }
 ```
 
