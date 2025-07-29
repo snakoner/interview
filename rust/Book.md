@@ -135,6 +135,20 @@ for value in v1.iter_mut() {
 let mut elem = &mut v1[0];
 *elem = 111; // ok
 
+// panic
+let element = &v1[100]; // panic
+
+// no panic
+let op: Option<&i32> = v1.get(100);
+match op {
+    Some(value) => {
+        println!("[100] = {value}");
+    },
+    None => {
+        println!("[100] not exists");
+    },
+}
+
 ```
 
 #### Как vec хранится в памяти?
