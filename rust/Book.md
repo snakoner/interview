@@ -121,15 +121,20 @@ v2.swap(0, 1); // v[0], v[1] = v[1], v[0]
 let v3 = Vec::with_capacity(10); // Вектор с предопределённой ёмкостью
 
 // value is &i32
-for value in v1,iter() {
+for value in v1.iter() {
     println!("{value}");
 }
 
 // value is &mut i32, can be changed
-for value in v1,iter_mut() {
+for value in v1.iter_mut() {
     *value = 3;
     println!("{value}"); // 3
 }
+
+// get mut ptr on vec element
+let mut elem = &mut v1[0];
+*elem = 111; // ok
+
 ```
 
 #### Как vec хранится в памяти?
