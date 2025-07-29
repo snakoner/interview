@@ -118,7 +118,7 @@ for num in &v2 {
 
 v2.swap(0, 1); // v[0], v[1] = v[1], v[0]
 
-let v3 = Vec::with_capacity(10); // Вектор с предопределённой ёмкостью
+let v3 = Vec::with_capacity(10); // Вектор с предопределённой ёмкостью: cap = 10, len = 0, поэтому нужно пушить.
 
 // value is &i32
 for value in v1.iter() {
