@@ -58,24 +58,29 @@ fn main() {
     assert_eq!(compress_string(""), "");
 
     {
-        let mut s = "heeellllooo";
+        let s = "heeellllooo";
         let decompressed_string = decompress_string(&compress_string(s));
         assert_eq!(s, decompressed_string);
     }
 
     {
-        let mut s = "hhha";
+        let s = "hhha";
         let decompressed_string = decompress_string(&compress_string(s));
         assert_eq!(s, decompressed_string);
     }
 
     {
-        let mut s = "h";
+        let s = "h";
         let decompressed_string = decompress_string(&compress_string(s));
         assert_eq!(s, decompressed_string);
     }
     {
-        let mut s = "heeellllo";
+        let s = "heeellllo";
+        let decompressed_string = decompress_string(&compress_string(s));
+        assert_eq!(s, decompressed_string);
+    }
+    {
+        let s = "";
         let decompressed_string = decompress_string(&compress_string(s));
         assert_eq!(s, decompressed_string);
     }
