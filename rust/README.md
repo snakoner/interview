@@ -238,3 +238,9 @@ fn main() {
 }
 
 ```
+
+# 14. Вывод backtract при panic
+```
+export RUST_BACKTRACE=0 # без backtrace
+export RUST_BACKTRACE=1 # с backtrace
+```
