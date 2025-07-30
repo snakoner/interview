@@ -59,29 +59,24 @@ fn main() {
 
     {
         let s = "heeellllooo";
-        let decompressed_string = decompress_string(&compress_string(s));
-        assert_eq!(s, decompressed_string);
+        assert_eq!(s, decompress_string(&compress_string(s)));
     }
 
     {
         let s = "hhha";
-        let decompressed_string = decompress_string(&compress_string(s));
-        assert_eq!(s, decompressed_string);
+        assert_eq!(s, decompress_string(&compress_string(s)));
     }
 
     {
         let s = "h";
-        let decompressed_string = decompress_string(&compress_string(s));
-        assert_eq!(s, decompressed_string);
+        assert_eq!(s, decompress_string(&compress_string(s)));
     }
     {
         let s = "heeellllo";
-        let decompressed_string = decompress_string(&compress_string(s));
-        assert_eq!(s, decompressed_string);
+        assert_eq!(s, decompress_string(&compress_string(s)));
     }
     {
         let s = "";
-        let decompressed_string = decompress_string(&compress_string(s));
-        assert_eq!(s, decompressed_string);
+        assert_eq!(s, decompress_string(&compress_string(s)));
     }
 }
