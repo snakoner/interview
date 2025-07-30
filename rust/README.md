@@ -199,3 +199,9 @@ fn main() {
     println!("{input_string}");
 }
 ```
+
+## 1. &str где хранится 
+```rust
+    let s: &str = "Hello"; // RODATA в бинарнике
+    
+```
