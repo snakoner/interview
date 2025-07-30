@@ -220,3 +220,21 @@ fn main() {
 
 // rustc автоматически делает let sum = *r + y; для типов, которые реализуют trait Copy
 ```
+
+# 13. Работа с памятью вручную
+```rust
+
+fn main() {
+    let mut vec: Vec<i32> = vec![1,2,3,4];
+    let vec_ptr = vec.as_mut_ptr();
+
+    for i in 0..vec.len() {
+        unsafe {
+            *vec_ptr.add(i) = 10;
+        }
+    }
+
+    println!("{vec:?}");    
+}
+
+```
