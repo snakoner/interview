@@ -244,3 +244,20 @@ fn main() {
 export RUST_BACKTRACE=0 # без backtrace
 export RUST_BACKTRACE=1 # с backtrace
 ```
+
+# 15. Когда можно не ставить ;
+1. При возврате из fn в последней строчке
+2. if, match которые возвращают значение:
+```rust
+let y = if x > 0 {
+    10
+} else {
+    20
+}; // ← ; нужен только после всего выражения let
+
+let result = match number {
+    1 => "one",
+    2 => "two",
+    _ => "other",
+};
+```
