@@ -730,3 +730,16 @@ contract EncodeVSEncodePacked {
     }
 }
 ```
+
+### 48. Сколько стоят операции чтение переменных транзакции и переменных сети
+
+| Переменная       | Опкод      | Стоимость газа |
+|------------------|------------|----------------|
+| block.timestamp  | TIMESTAMP  | 2              |
+| block.number     | NUMBER     | 2              |
+| msg.sender       | CALLER     | 2              |
+| msg.value        | CALLVALUE  | 2              |
+| block.chainid    | CHAINID    | 2              |
+| tx.gasprice      | GASPRICE   | 2              |
+
+Но MSTORE/MLOAD - 3 газа. Поэтому сохранение этих переменных в память 3 газа на запись + 1 газа на каждое чтение.
