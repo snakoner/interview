@@ -715,15 +715,18 @@ contract Child is Parent {
 ### 47. Разница между abi.encode и abi.encodePacked
 ```solidity
 contract EncodeVSEncodePacked {
-    function encode() external pure returns (bytes memory) {
-        // 0x112233'445566'778899
-        return abi.encodePacked(bytes3(0x112233), bytes3(0x445566), bytes3(0x778899));
-    }
     function encodePacked() external pure returns (bytes memory) {
-        // 0x1122330000000000000000000000000000000000000000000000000000000000'
-        // 0x4455660000000000000000000000000000000000000000000000000000000000'
-        // 0x7788990000000000000000000000000000000000000000000000000000000000
-        return abi.encodePacked(bytes3(0x112233), bytes3(0x445566), bytes3(0x778899));
+        // 111111
+        // 222222
+        // 333333
+        return abi.encodePacked(bytes3(0x111111), bytes3(0x222222), bytes3(0x333333));
+    }
+
+    function encode() external pure returns (bytes memory) {
+        // 1111110000000000000000000000000000000000000000000000000000000000
+        // 2222220000000000000000000000000000000000000000000000000000000000
+        // 3333330000000000000000000000000000000000000000000000000000000000
+        return abi.encode(bytes3(0x111111), bytes3(0x222222), bytes3(0x333333));
     }
 }
 ```
