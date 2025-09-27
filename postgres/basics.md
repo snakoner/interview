@@ -1,4 +1,4 @@
-```psql
+```sql
 CREATE TABLE owners (
   id serial primary key,
   name text not null
