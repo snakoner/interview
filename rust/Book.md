@@ -63,7 +63,7 @@ fn main() {
 - usize // Используется для индексов и длины массивов
 - f32/f64
 - bool
-- char // **Unicode!!!**
+- char // **Unicode!!!** (32 бита)
 
 ```rust
 let x = 12; // by default this is i32
