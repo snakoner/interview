@@ -261,3 +261,22 @@ let result = match number {
     _ => "other",
 };
 ```
+
+
+# 16. as_bytes, chars
+
+- .chars() -> Chars<_>
+- .as_bytes() -> &[u8]
+
+```
+    let s: String = String::from("привет");
+
+    for c in s.chars().iter() {
+        println!("{iter}"); // п р и в е т (внутри chars конвертация из байтов в char, строки в rust - unicode)
+    }
+
+    for b in s.as_bytes() {
+        println!("{b}"); // 208 191 209 128 208 184 208 178 208 181 209 130 (байты)
+    }
+
+```
