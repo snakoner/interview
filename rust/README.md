@@ -291,3 +291,5 @@ let result = match number {
     }
 
 ```
+
+# 17. String::from("привет").len() -> 12 возвращает число байт (не char)
